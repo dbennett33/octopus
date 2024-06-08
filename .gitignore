@@ -401,6 +401,4 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
-# Local Appsettings
-appsettings.Development.json
-/Src/Octopus.Sync/internal-nlog.txt
+
