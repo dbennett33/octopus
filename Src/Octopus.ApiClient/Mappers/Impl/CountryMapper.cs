@@ -17,7 +17,7 @@ namespace Octopus.ApiClient.Mappers.Impl
                 {
                     var country = new Country
                     {
-                        Name = apiCountry.Name,
+                        Name = apiCountry.Name ?? string.Empty,
                         Code = apiCountry.Code ?? string.Empty,
                         Flag = apiCountry.Flag ?? string.Empty
                     };
