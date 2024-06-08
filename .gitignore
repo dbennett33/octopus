@@ -404,4 +404,3 @@ FodyWeavers.xsd
 # Local Appsettings
 appsettings.Development.json
 /Src/Octopus.Sync/internal-nlog.txt
-/Src/Octopus.Sync/appsettings.Development.json
