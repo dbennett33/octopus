@@ -11,32 +11,31 @@
 
     <ItemGroup>
       <Compile Remove="Mappers\**" />
-      <Compile Remove="Services\**" />
       <EmbeddedResource Remove="Mappers\**" />
-      <EmbeddedResource Remove="Services\**" />
       <None Remove="Mappers\**" />
-      <None Remove="Services\**" />
     </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="FluentAssertions" Version="6.12.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
+        <PackageReference Include="Moq" Version="4.20.70" />
+        <PackageReference Include="MSTest.TestAdapter" Version="3.4.3" />
+        <PackageReference Include="MSTest.TestFramework" Version="3.4.3" />
+        <PackageReference Include="NLog" Version="5.3.2" />
+        <PackageReference Include="NLog.Extensions.Logging" Version="5.3.11" />
         <PackageReference Include="NSubstitute" Version="5.1.0" />
-        <PackageReference Include="NUnit" Version="4.1.0" />
-        <PackageReference Include="NUnit.Analyzers" Version="4.2.0">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
-        <PackageReference Include="RichardSzalay.MockHttp" Version="7.0.0" />
     </ItemGroup>
 
-    <ItemGroup>
-        <Using Include="NUnit.Framework" />
-    </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\Src\Octopus.ApiClient\Octopus.ApiClient.csproj" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <None Update="nlog.config">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

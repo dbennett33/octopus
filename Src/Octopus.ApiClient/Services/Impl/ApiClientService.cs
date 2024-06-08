@@ -25,42 +25,55 @@ namespace Octopus.ApiClient.Services.Impl
 
         public async Task<string> GetAsync(string endpoint)
         {
+            string content = string.Empty;
             try
             {
                 if (_apiState.CallsRemaining <= 0)
                 {
-                    throw new InvalidOperationException($"Rate limit exceeded.");
+                    _logger.LogWarning("Rate limit exceeded. No more requests can be made.");
                 }
+                else
+                {
+                    _logger.LogInformation($"Making HTTP GET request to: {endpoint}");
 
-                _logger.LogInformation($"Making HTTP GET request to: {endpoint}");
+                    var response = await _httpClient.GetAsync(endpoint);
+                    response.EnsureSuccessStatusCode();
 
-                var response = await _httpClient.GetAsync(endpoint);          
-                response.EnsureSuccessStatusCode();
+                    // Update rate limit information from headers 
+                    UpdateRateLimitInfo(response.Headers);
 
-                // Update rate limit information from headers 
-                UpdateRateLimitInfo(response.Headers);
-
-                var content = await response.Content.ReadAsStringAsync();
-                return content;
+                    content = await response.Content.ReadAsStringAsync();
+                }
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError($"Request error: {e.Message}");
-                throw;
             }
             catch (Exception e)
             {
                 _logger.LogError($"Unexpected error: {e.Message}");
-                throw;
             }
+
+            return content;     
         }
 
-        private void UpdateRateLimitInfo(HttpResponseHeaders? headers)
+        public void UpdateRateLimitInfo(HttpResponseHeaders? headers)
         {
-            var remainingCalls = headers?.GetValues(ApiGlobal.ResponseHeaders.NAME_CALLS_REMAINING).FirstOrDefault();
-            if (remainingCalls != null && int.TryParse(remainingCalls, out var calls))
+            try
             {
-                _apiState.CallsRemaining = calls;
+                var remainingCalls = headers?.GetValues(ApiGlobal.ResponseHeaders.NAME_CALLS_REMAINING).FirstOrDefault();
+                if (remainingCalls != null && int.TryParse(remainingCalls, out var calls))
+                {
+                    _apiState.CallsRemaining = calls;
+                }
+                else
+                {
+                    _logger.LogError("Error extracting rate limit information from response headers.");
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Error updating rate limit information: {e.Message}");
             }
         }
     }
