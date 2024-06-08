@@ -402,3 +402,6 @@ FodyWeavers.xsd
 *.sln.iml
 
 
+# Local Appsettings
+appsettings.Development.json
+
