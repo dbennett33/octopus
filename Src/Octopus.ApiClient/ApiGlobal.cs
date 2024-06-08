@@ -11,6 +11,7 @@ namespace Octopus.ApiClient
             public const string TEAMS_STATS = $"{BASE_URL}/teams/statistics";
             public const string PLAYERS = $"{BASE_URL}/players";
             public const string FIXTURES = $"{BASE_URL}/fixtures";
+            public const string API_STATUS = $"{BASE_URL}/status";
         }
         
         public static class Headers

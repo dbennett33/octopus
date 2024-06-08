@@ -36,6 +36,7 @@ namespace Octopus.Sync
         {
             var configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
                 .Build();
 
             ConfigureLogging(builder);
@@ -101,6 +102,7 @@ namespace Octopus.Sync
             builder.Services.AddTransient<ICountryMapper, CountryMapper>();
             builder.Services.AddTransient<IApiLeagueService, ApiLeagueService>();
             builder.Services.AddTransient<ILeagueMapper, LeagueMapper>();
+            builder.Services.AddSingleton<ApiState>();
         }
 
         private static void RegisterSyncServices(HostApplicationBuilder builder)

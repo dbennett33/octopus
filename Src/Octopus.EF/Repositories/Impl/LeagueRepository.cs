@@ -35,7 +35,7 @@ namespace Octopus.EF.Repositories.Impl
                 {
                     _logger.LogInformation($"Country ID is not set for league [{league.Name}]");
                     var existingCountry = await _context.Countries
-                                    .FirstOrDefaultAsync(c => c.Name == league.Country.Name);
+                        .FirstOrDefaultAsync(c => c.Name == (league.Country != null ? league.Country.Name : null));
 
                     if (existingCountry != null)
                     {
@@ -68,7 +68,7 @@ namespace Octopus.EF.Repositories.Impl
                     {
                         _logger.LogInformation($"Country ID is not set for league [{league.Name}]");
                         var existingCountry = await _context.Countries
-                            .FirstOrDefaultAsync(c => c.Name == league.Country.Name);
+                            .FirstOrDefaultAsync(c => c.Name == (league.Country != null ? league.Country.Name : null));
 
                         if (existingCountry != null)
                         {
