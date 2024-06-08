@@ -7,7 +7,7 @@ namespace Octopus.EF.Data.Entities
     {
         public int Id { get; set; }
         public int TeamStatsId { get; set; }
-        public TeamStats TeamStats { get; set; }
+        public TeamStats? TeamStats { get; set; }
         /// <summary>
         /// Gets or sets the number of biggest goals scored at home.
         /// </summary>

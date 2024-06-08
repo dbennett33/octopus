@@ -18,7 +18,7 @@ namespace Octopus.EF.Data.Entities
         /// <summary>
         /// Gets or sets the system settings associated with the installation.
         /// </summary>
-        public SystemSettings SystemSettings { get; set; }
+        public SystemSettings? SystemSettings { get; set; }
 
         /// <summary>
         /// Gets or sets the version of the installation.

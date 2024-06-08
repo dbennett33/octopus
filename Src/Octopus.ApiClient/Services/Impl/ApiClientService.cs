@@ -75,19 +75,7 @@ namespace Octopus.ApiClient.Services.Impl
 
         private void UpdateRateLimitInfo(HttpResponseHeaders headers)
         {
-            if (headers.Contains("X-RateLimit-Remaining"))
-            {
-                var remainingCalls = headers.GetValues("X-RateLimit-Remaining").FirstOrDefault();
-                _remainingCalls = int.Parse(remainingCalls);
-                Console.WriteLine($"Remaining calls: {_remainingCalls}");
-            }
-
-            if (headers.Contains("X-RateLimit-Reset"))
-            {
-                var rateLimitReset = headers.GetValues("X-RateLimit-Reset").FirstOrDefault();
-                _rateLimitReset = DateTimeOffset.FromUnixTimeSeconds(long.Parse(rateLimitReset)).UtcDateTime;
-                Console.WriteLine($"Rate limit reset time: {_rateLimitReset}");
-            }
+   
         }
     }
 }

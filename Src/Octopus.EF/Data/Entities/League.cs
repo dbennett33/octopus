@@ -35,7 +35,7 @@ namespace Octopus.EF.Data.Entities
         /// <summary>
         /// Gets or sets the country associated with the league.
         /// </summary>
-        public Country Country { get; set; }
+        public Country? Country { get; set; }
 
         /// <summary>
         /// Gets or sets the seasons associated with the league.

@@ -18,7 +18,7 @@ namespace Octopus.EF.Data.Entities
         /// <summary>
         /// Gets or sets the season associated with the coverage.
         /// </summary>
-        public Season Season { get; set; }
+        public Season? Season { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether events are covered.
