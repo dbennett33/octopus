@@ -404,4 +404,4 @@ FodyWeavers.xsd
 
 # Local Appsettings
 /appsettings.Development.json
-
+appsettings.Development.json
