@@ -18,7 +18,7 @@ namespace Octopus.EF.Data.Entities
         /// <summary>
         /// Gets or sets the league associated with the season.
         /// </summary>
-        public League League { get; set; }
+        public League? League { get; set; }
 
         /// <summary>
         /// Gets or sets the year of the season.
@@ -28,12 +28,12 @@ namespace Octopus.EF.Data.Entities
         /// <summary>
         /// Gets or sets the start date of the season.
         /// </summary> 
-        public string StartDate { get; set; }
+        public string? StartDate { get; set; }
 
         /// <summary>
         /// Gets or sets the end date of the season.
         /// </summary>
-        public string EndDate { get; set; }
+        public string? EndDate { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the season is the current season.

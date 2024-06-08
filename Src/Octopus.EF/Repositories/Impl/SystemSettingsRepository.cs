@@ -24,7 +24,7 @@ namespace Octopus.EF.Repositories.Impl
             _logger.LogInformation("Getting system settings from database");
             var settings = await _context.SystemSettings.FirstOrDefaultAsync();
 
-            return settings;
+            return settings!;
         }
         
         public void UpdateSystemSettingsAsync(SystemSettings systemSettings)

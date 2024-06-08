@@ -21,13 +21,10 @@ namespace Octopus.Sync
     {
         public static void Main(string[] args)
         {
-            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
-            System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
-            string version = fvi.ProductVersion.Substring(0, fvi.ProductVersion.IndexOf('+'));
 
             var logger = LogManager.Setup().LoadConfigurationFromFile("nlog.config").GetCurrentClassLogger();
-            logger.Info(GetBanner(version));      
-            
+            PrintBanner(logger);
+
             var builder = Host.CreateApplicationBuilder(args);
             ConfigureServices(builder);
 
@@ -59,10 +56,17 @@ namespace Octopus.Sync
             builder.Services.AddHttpClient<IApiClientService, ApiClientService>((serviceProvider, client) =>
             {
                 var apiConfig = serviceProvider.GetRequiredService<IOptions<ApiConfiguration>>().Value;
-                client.BaseAddress = new Uri(apiConfig.BaseUrl);
-                client.DefaultRequestHeaders.Add(ApiGlobal.Headers.NAME_API_KEY, apiConfig.ApiKey);
-                client.DefaultRequestHeaders.Add(ApiGlobal.Headers.NAME_HOST, apiConfig.ApiHost);
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                if (apiConfig == null)
+                {
+                    throw new System.Exception("ApiConfiguration is not set");
+                }
+                else
+                {
+                    client.BaseAddress = new Uri(apiConfig.BaseUrl!);
+                    client.DefaultRequestHeaders.Add(ApiGlobal.Headers.NAME_API_KEY, apiConfig.ApiKey);
+                    client.DefaultRequestHeaders.Add(ApiGlobal.Headers.NAME_HOST, apiConfig.ApiHost);
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                }
             });
         }
 
@@ -109,12 +113,21 @@ namespace Octopus.Sync
 
 
         }
+        private static void PrintBanner(Logger logger)
+        {
+            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
+            string version = fvi.ProductVersion?.Substring(0, fvi.ProductVersion.IndexOf('+')) ?? string.Empty;
+            logger.Info(GetBanner(version));
+        }
 
-	// will move this
         private static string GetBanner(string version)
         {
 
-            var banner = string.Format("\r\n///////////////////////////////////////\r\n///////////////////////////////////////\r\n   ____       _                        \r\n  / __ \\     | |                       \r\n | |  | | ___| |_ ___  _ __  _   _ ___ \r\n | |  | |/ __| __/ _ \\| '_ \\| | | / __|\r\n | |__| | (__| || (_) | |_) | |_| \\__ \\\r\n  \\____/ \\___|\\__\\___/| .__/ \\__,_|___/\r\n                      | |              \r\n                      |_|  v{0}       \r\n\r\n///////////////////////////////////////\r\n///////////////////////////////////////", version);
+            var banner = string.Format("\r\n///////////////////////////////////////\r\n///////////////////////////////////////\r\n   ____  " +
+                "     _                        \r\n  / __ \\     | |                       \r\n | |  | | ___| |_ ___  _ __  _   _ ___ \r\n | |  " +
+                "| |/ __| __/ _ \\| '_ \\| | | / __|\r\n | |__| | (__| || (_) | |_) | |_| \\__ \\\r\n  \\____/ \\___|\\__\\___/| .__/ \\__,_|___/\r\n " +
+                "                     | |              \r\n                      |_|  v{0}       \r\n\r\n///////////////////////////////////////\r\n///////////////////////////////////////", version);
             return banner;
         }
     }
