@@ -11,6 +11,8 @@ using Octopus.ApiClient.Services.Interfaces;
 using Octopus.EF.Data;
 using Octopus.EF.Repositories.Impl;
 using Octopus.EF.Repositories.Interfaces;
+using Octopus.Importer.Services.Impl;
+using Octopus.Importer.Services.Interfaces;
 using Octopus.Sync.Services.Impl;
 using Octopus.Sync.Services.Interfaces;
 using System.Net.Http.Headers;
@@ -45,6 +47,7 @@ namespace Octopus.Sync
 
             RegisterApiServices(builder);
             RegisterRepositoryServices(builder);
+            RegisterImporterServices(builder);
             RegisterSyncServices(builder);
 
             builder.Services.AddHostedService<Worker>();    
@@ -103,6 +106,12 @@ namespace Octopus.Sync
             builder.Services.AddTransient<IApiLeagueService, ApiLeagueService>();
             builder.Services.AddTransient<ILeagueMapper, LeagueMapper>();
             builder.Services.AddSingleton<ApiState>();
+        }
+
+        private static void RegisterImporterServices(HostApplicationBuilder builder)
+        {
+            builder.Services.AddScoped<IImportCountryService, ImportCountryService>();
+            builder.Services.AddScoped<IImportLeagueService, ImportLeagueService>();
         }
 
         private static void RegisterSyncServices(HostApplicationBuilder builder)
