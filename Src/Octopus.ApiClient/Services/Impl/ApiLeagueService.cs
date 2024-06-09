@@ -25,7 +25,7 @@ namespace Octopus.ApiClient.Services.Impl
         {
             try
             {
-                Console.WriteLine("Calling API to get leagues...");
+                Console.WriteLine("Calling API to get leagues..."); 
                 var response = await _apiClient.GetAsync(_leaguesEndpoint);
                 Console.WriteLine("API call completed.");
 
