@@ -24,38 +24,45 @@ namespace Octopus.ApiClient.Mappers.Impl
                 Seasons = new List<Season>()
             };
 
-            foreach (var apiSeason in apiLeague.Seasons!)
+            try
+            {     
+                foreach (var apiSeason in apiLeague.Seasons!)
+                {
+                    var coverage = new EF.Data.Entities.Coverage
+                    {
+                        Events = apiSeason.Coverage?.Fixtures?.Events ?? false,
+                        Lineups = apiSeason.Coverage?.Fixtures?.Lineups ?? false,
+                        FixtureStats = apiSeason.Coverage?.Fixtures?.StatisticsFixtures ?? false,
+                        PlayerStats = apiSeason.Coverage?.Fixtures?.StatisticsPlayers ?? false,
+                        Standings = apiSeason.Coverage?.Standings ?? false,
+                        Players = apiSeason.Coverage?.Players ?? false,
+                        TopScorers = apiSeason.Coverage?.TopScorers ?? false,
+                        TopAssists = apiSeason.Coverage?.TopAssists ?? false,
+                        TopCards = apiSeason.Coverage?.TopCards ?? false,
+                        Injuries = apiSeason.Coverage?.Injuries ?? false,
+                        Predictions = apiSeason.Coverage?.Predictions ?? false,
+                        Odds = apiSeason.Coverage?.Odds ?? false
+                    };
+
+                    var season = new Season
+                    {
+                        SeasonCoverage = coverage,
+                        Year = apiSeason.Year.ToString(),
+                        StartDate = apiSeason.Start,
+                        EndDate = apiSeason.End,
+                        Current = apiSeason.Current,
+                        League = league,
+                        LeagueId = league.Id
+                    };
+
+                    season.SeasonCoverage.Season = season;
+
+                    league.Seasons.Add(season);
+                }
+            }
+            catch(Exception ex)
             {
-                var coverage = new EF.Data.Entities.Coverage
-                {
-                    Events = apiSeason.Coverage?.Fixtures?.Events ?? false,
-                    Lineups = apiSeason.Coverage?.Fixtures?.Lineups ?? false,
-                    FixtureStats = apiSeason.Coverage?.Fixtures?.StatisticsFixtures ?? false,
-                    PlayerStats = apiSeason.Coverage?.Fixtures?.StatisticsPlayers ?? false,
-                    Standings = apiSeason.Coverage?.Standings ?? false,
-                    Players = apiSeason.Coverage?.Players ?? false,
-                    TopScorers = apiSeason.Coverage?.TopScorers ?? false,
-                    TopAssists = apiSeason.Coverage?.TopAssists ?? false,
-                    TopCards = apiSeason.Coverage?.TopCards ?? false,
-                    Injuries = apiSeason.Coverage?.Injuries ?? false,
-                    Predictions = apiSeason.Coverage?.Predictions ?? false,
-                    Odds = apiSeason.Coverage?.Odds ?? false
-                };
-
-                var season = new Season
-                {
-                    SeasonCoverage = coverage,
-                    Year = apiSeason.Year.ToString(),
-                    StartDate = apiSeason.Start,
-                    EndDate = apiSeason.End,
-                    Current = apiSeason.Current,
-                    League = league,
-                    LeagueId = league.Id
-                };
-
-                season.SeasonCoverage.Season = season;               
-
-                league.Seasons.Add(season);
+                
             }
 
             return league;
