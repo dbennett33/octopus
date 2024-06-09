@@ -24,9 +24,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{D25ABD72-D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Octopus.Sync", "Src\Octopus.Sync\Octopus.Sync.csproj", "{DFC93F9C-4E05-470B-ADCD-448EAB4C9D91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Octopus.Importer", "Src\Octopus.Importer\Octopus.Importer.csproj", "{78429FF2-2C62-430F-A90C-6ADFC5770F8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Octopus.Importer", "Src\Octopus.Importer\Octopus.Importer.csproj", "{78429FF2-2C62-430F-A90C-6ADFC5770F8D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Octopus.Scheduler", "Src\Octopus.Scheduler\Octopus.Scheduler.csproj", "{5A36C765-4C7B-4C82-A542-13CE11462C54}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Octopus.Scheduler", "Src\Octopus.Scheduler\Octopus.Scheduler.csproj", "{5A36C765-4C7B-4C82-A542-13CE11462C54}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

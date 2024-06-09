@@ -15,6 +15,8 @@ using Octopus.EF.Repositories.Impl;
 using Octopus.EF.Repositories.Interfaces;
 using Octopus.Importer.Services.Impl;
 using Octopus.Importer.Services.Interfaces;
+using Octopus.Scheduler.Services.Impl;
+using Octopus.Scheduler.Services.Interfaces;
 using Octopus.Sync.Services.Impl;
 using Octopus.Sync.Services.Interfaces;
 using System.Net.Http.Headers;
@@ -46,11 +48,13 @@ namespace Octopus.Sync
             ConfigureLogging(builder);
             ConfigureDatabase(builder, configuration);
             ConfigureApiClient(builder, configuration);
+            ConfigureHangfire(builder, configuration);
 
             RegisterApiServices(builder);
             RegisterRepositoryServices(builder);
             RegisterImporterServices(builder);
             RegisterSyncServices(builder);
+            RegisterSchedulerServices(builder);
 
             builder.Services.AddHostedService<Worker>();    
         }
@@ -125,7 +129,12 @@ namespace Octopus.Sync
             builder.Services.AddScoped<IImportLeagueService, ImportLeagueService>();
         }
 
-        private static void RegisterHangfireServices(HostApplicationBuilder builder, IConfigurationRoot configuration)
+        private static void RegisterSchedulerServices(HostApplicationBuilder builder)
+        {
+            builder.Services.AddScoped<IScheduleCountryService, ScheduleCountryService>();
+        }
+
+        private static void ConfigureHangfire(HostApplicationBuilder builder, IConfigurationRoot configuration)
         {
             builder.Services.AddHangfire(config => config
                 .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
@@ -141,7 +150,7 @@ namespace Octopus.Sync
                 }));
 
             // Add the processing server as IHostedService
-            builder.Services.AddHangfireServer();
+            builder.Services.AddHangfireServer();            
         }
 
 

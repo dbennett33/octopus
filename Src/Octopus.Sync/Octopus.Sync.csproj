@@ -47,5 +47,6 @@
     <ProjectReference Include="..\Octopus.ApiClient\Octopus.ApiClient.csproj" />
     <ProjectReference Include="..\Octopus.EF\Octopus.EF.csproj" />
     <ProjectReference Include="..\Octopus.Importer\Octopus.Importer.csproj" />
+    <ProjectReference Include="..\Octopus.Scheduler\Octopus.Scheduler.csproj" />
   </ItemGroup>
 </Project>
