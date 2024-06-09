@@ -1,3 +1,5 @@
+using Hangfire;
+using Hangfire.SqlServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using NLog;
@@ -121,9 +123,28 @@ namespace Octopus.Sync
             builder.Services.AddScoped<IInstallerService, InstallerService>();
             builder.Services.AddScoped<IImportCountryService, ImportCountryService>();
             builder.Services.AddScoped<IImportLeagueService, ImportLeagueService>();
-
-
         }
+
+        private static void RegisterHangfireServices(HostApplicationBuilder builder, IConfigurationRoot configuration)
+        {
+            builder.Services.AddHangfire(config => config
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseSqlServerStorage(configuration.GetConnectionString("HangfireConnection"), new SqlServerStorageOptions
+                {
+                    CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                    SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                    QueuePollInterval = TimeSpan.Zero,
+                    UseRecommendedIsolationLevel = true,
+                    DisableGlobalLocks = true
+                }));
+
+            // Add the processing server as IHostedService
+            builder.Services.AddHangfireServer();
+        }
+
+
         private static void PrintBanner(Logger logger)
         {
             System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();

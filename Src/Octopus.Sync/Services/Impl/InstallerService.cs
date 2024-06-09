@@ -43,12 +43,7 @@ namespace Octopus.Sync.Services.Impl
                 await _repositoryManager.BeginTransactionAsync();
                 installInfo.LeaguesInstalled = await _leagueService.ImportLeagues();
                 await _repositoryManager.CommitTransactionAsync();
-            }
-
-
-            
-
+            } 
         }
-
     }
 }
