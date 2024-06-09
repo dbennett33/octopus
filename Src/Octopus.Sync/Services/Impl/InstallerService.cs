@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Octopus.EF.Data.Entities;
 using Octopus.EF.Repositories.Interfaces;
+using Octopus.Importer.Services.Interfaces;
 using Octopus.Sync.Services.Interfaces;
 
 namespace Octopus.Sync.Services.Impl
