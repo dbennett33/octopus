@@ -43,7 +43,7 @@ namespace Octopus.EF.Repositories.Impl
 
         public async Task<int> CompleteAsync()
         {
-            _logger.LogInformation("Saving changes to database");
+            _logger.LogTrace("Saving changes to database");
             return await _context.SaveChangesAsync();
         }
 
@@ -93,6 +93,7 @@ namespace Octopus.EF.Repositories.Impl
 
         public async Task MigrateAsync()
         {
+            _logger.LogInformation("Migrating database");
             await _context.Database.MigrateAsync();
         }
 

@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Hangfire;
+﻿using Hangfire;
 using Octopus.Scheduler.Services.Interfaces;
-using Octopus.Scheduler.Tasks;
 using Octopus.Scheduler.Tasks.Interfaces;
 
 namespace Octopus.Scheduler.Services.Impl

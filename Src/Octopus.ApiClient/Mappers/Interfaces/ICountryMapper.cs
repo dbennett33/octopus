@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Octopus.ApiClient.Models;
 using Octopus.EF.Data.Entities;
 

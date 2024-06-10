@@ -1,7 +1,7 @@
+using Octopus.EF.Data.Entities;
+
 namespace Octopus.EF.Repositories.Interfaces
 {
-    using Octopus.EF.Data.Entities;
-
     /// <summary>
     /// Represents a repository for managing countries.
     /// </summary>

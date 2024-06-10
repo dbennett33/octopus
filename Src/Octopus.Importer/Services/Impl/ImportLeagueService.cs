@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using Octopus.ApiClient.Services.Interfaces;
-using Octopus.EF.Data.Entities;
 using Octopus.EF.Repositories.Interfaces;
 using Octopus.Importer.Services.Interfaces;
 

@@ -4,12 +4,6 @@ using Octopus.ApiClient.Mappers.Interfaces;
 using Octopus.ApiClient.Models;
 using Octopus.ApiClient.Services.Interfaces;
 using Octopus.EF.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Octopus.ApiClient.Services.Impl
 {
@@ -21,7 +15,9 @@ namespace Octopus.ApiClient.Services.Impl
         private readonly ILogger<ApiTeamService> _logger;
         private readonly string _teamsEndpoint = ApiGlobal.Endpoints.TEAMS;
 
-        public ApiTeamService(IApiClientService apiClient, ITeamMapper teamMapper, ILogger<ApiTeamService> logger)
+        public ApiTeamService(IApiClientService apiClient,
+                              ITeamMapper teamMapper,
+                              ILogger<ApiTeamService> logger)
         {
             _apiClient = apiClient;
             _teamMapper = teamMapper;
@@ -35,13 +31,14 @@ namespace Octopus.ApiClient.Services.Impl
 
             if (string.IsNullOrEmpty(response))
             {
-                _logger.LogInformation("API response is null or empty.");
+                _logger.LogError("API response is null or empty.");
                 throw new Exception("API response is null or empty");
             }
 
             var apiResponse = JsonConvert.DeserializeObject<ApiResponse<ApiTeam>>(response);
             if (apiResponse == null || apiResponse.Response == null)
             {
+                _logger.LogError("Failed to deserialize API response.");
                 throw new Exception("Failed to deserialize API response.");
             }
 
@@ -61,13 +58,14 @@ namespace Octopus.ApiClient.Services.Impl
 
             if (string.IsNullOrEmpty(response))
             {
-                _logger.LogInformation("API response is null or empty.");
+                _logger.LogError("API response is null or empty.");
                 throw new Exception("API response is null or empty");
             }
 
             var apiResponse = JsonConvert.DeserializeObject<ApiResponse<ApiTeam>>(response);
             if (apiResponse == null || apiResponse.Response == null)
             {
+                _logger.LogError("Failed to deserialize API response.");
                 throw new Exception("Failed to deserialize API response.");
             }
 
@@ -87,13 +85,14 @@ namespace Octopus.ApiClient.Services.Impl
 
             if (string.IsNullOrEmpty(response))
             {
-                _logger.LogInformation("API response is null or empty.");
+                _logger.LogError("API response is null or empty.");
                 throw new Exception("API response is null or empty");
             }
 
             var apiResponse = JsonConvert.DeserializeObject<ApiResponse<ApiTeam>>(response);
             if (apiResponse == null || apiResponse.Response == null)
             {
+                _logger.LogError("Failed to deserialize API response.");
                 throw new Exception("Failed to deserialize API response.");
             }
 
@@ -101,8 +100,5 @@ namespace Octopus.ApiClient.Services.Impl
 
             return team;
         }
-
-
-
     }
 }

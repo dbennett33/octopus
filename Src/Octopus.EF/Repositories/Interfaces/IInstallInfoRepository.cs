@@ -1,11 +1,12 @@
 using Octopus.EF.Data.Entities;
 
-namespace Octopus.EF.Repositories.Interfaces;
-
-public interface IInstallInfoRepository
+namespace Octopus.EF.Repositories.Interfaces
 {
-    Task<List<InstallInfo>> GetAllInstallInfoAsync();
-    Task<InstallInfo?> GetInstallInfoByIdAsync(int installInfoId);
-    void UpdateInstallInfoAsync(InstallInfo installInfo);
-    Task AddInstallInfoAsync(InstallInfo installInfo);
+    public interface IInstallInfoRepository
+    {
+        Task<List<InstallInfo>> GetAllInstallInfoAsync();
+        Task<InstallInfo?> GetInstallInfoByIdAsync(int installInfoId);
+        void UpdateInstallInfoAsync(InstallInfo installInfo);
+        Task AddInstallInfoAsync(InstallInfo installInfo);
+    }
 }

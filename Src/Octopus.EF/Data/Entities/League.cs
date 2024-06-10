@@ -1,7 +1,5 @@
 namespace Octopus.EF.Data.Entities
 {
-    using System.Collections.Generic;
-
     /// <summary>
     /// Represents a league.
     /// </summary>

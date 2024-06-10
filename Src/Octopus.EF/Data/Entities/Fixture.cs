@@ -1,7 +1,5 @@
 namespace Octopus.EF.Data.Entities
 {
-    using System;
-
     /// <summary>
     /// Represents a fixture in a sports league.
     /// </summary>

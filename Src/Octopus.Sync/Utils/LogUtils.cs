@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Octopus.Sync.Utils
+﻿namespace Octopus.Sync.Utils
 {
     public static class LogUtils
     {
-
-
         public static string GetBanner()
         {
             var version = GetVersionForBanner();

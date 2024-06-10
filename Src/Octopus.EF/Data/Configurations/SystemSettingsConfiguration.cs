@@ -1,9 +1,9 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Octopus.EF.Data.Entities;
+
 namespace Octopus.EF.Data.Configurations
 {
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.Metadata.Builders;
-    using Octopus.EF.Data.Entities;
-
     public class SystemSettingsConfiguration : IEntityTypeConfiguration<SystemSettings>
     {
         public void Configure(EntityTypeBuilder<SystemSettings> builder)

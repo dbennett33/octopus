@@ -1,9 +1,9 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
+
 namespace Octopus.EF.Data
 {
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.Design;
-    using Microsoft.Extensions.Configuration;
-
     /// <summary>
     /// Factory class for creating the design-time instance of the OctoDbContext.
     /// </summary>

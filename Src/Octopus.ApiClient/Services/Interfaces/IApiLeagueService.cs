@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Octopus.EF.Data.Entities;
 
 namespace Octopus.ApiClient.Services.Interfaces

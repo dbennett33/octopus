@@ -1,4 +1,3 @@
-using System.Net;
 using System.Net.Http.Headers;
 using Microsoft.Extensions.Logging;
 using Octopus.ApiClient.Services.Interfaces;
@@ -10,11 +9,11 @@ namespace Octopus.ApiClient.Services.Impl
         private readonly HttpClient _httpClient;
         private readonly ApiState _apiState;
         private readonly ILogger<ApiClientService> _logger;
+                
 
-        // Rate limit information
-        
-
-        public ApiClientService(HttpClient httpClient, ApiState apiState, ILogger<ApiClientService> logger)
+        public ApiClientService(HttpClient httpClient,
+                                ApiState apiState,
+                                ILogger<ApiClientService> logger)
         {
             _httpClient = httpClient;
             _apiState = apiState;
@@ -22,6 +21,7 @@ namespace Octopus.ApiClient.Services.Impl
         }
 
         public int GetRemainingCalls() => _apiState.CallsRemaining;
+        public int GetResetTime() => _apiState.ResetTime;
 
         public async Task<string> GetAsync(string endpoint)
         {
@@ -34,12 +34,11 @@ namespace Octopus.ApiClient.Services.Impl
                 }
                 else
                 {
-                    _logger.LogInformation($"Making HTTP GET request to: {endpoint}");
+                    _logger.LogTrace($"Making HTTP GET request to: {endpoint}");
 
                     var response = await _httpClient.GetAsync(endpoint);
                     response.EnsureSuccessStatusCode();
 
-                    // Update rate limit information from headers 
                     UpdateRateLimitInfo(response.Headers);
 
                     content = await response.Content.ReadAsStringAsync();
@@ -69,6 +68,17 @@ namespace Octopus.ApiClient.Services.Impl
                 else
                 {
                     _logger.LogError("Error extracting rate limit information from response headers.");
+                }
+                if (headers?.TryGetValues(ApiGlobal.ResponseHeaders.NAME_CALL_RESET, out var resetTime) == true)
+                {
+                    if (int.TryParse(resetTime.FirstOrDefault(), out var reset))
+                    {
+                        _apiState.ResetTime = reset;
+                    }
+                    else
+                    {
+                        _logger.LogError("Error extracting rate limit information from response headers.");
+                    }
                 }
             }
             catch (Exception e)

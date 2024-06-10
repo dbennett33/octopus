@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Octopus.EF.Data.Entities;
 using Octopus.EF.Repositories.Interfaces;
@@ -20,8 +19,7 @@ namespace Octopus.EF.Repositories.Impl
         
         public async Task<SystemSettings> GetSystemSettingsAsync()
         {
-
-            _logger.LogInformation("Getting system settings from database");
+            _logger.LogTrace("Getting system settings from database");
             var settings = await _context.FindAsync<SystemSettings>(1);
 
             return settings!;
@@ -29,7 +27,7 @@ namespace Octopus.EF.Repositories.Impl
         
         public void UpdateSystemSettingsAsync(SystemSettings systemSettings)
         {
-            _logger.LogInformation("Updating system settings in database");
+            _logger.LogTrace("Updating system settings in database");
             _context.SystemSettings.Update(systemSettings);
         }
         
@@ -38,11 +36,11 @@ namespace Octopus.EF.Repositories.Impl
             var exists = await _context.SystemSettings.FindAsync(1);
             if (exists != null)
             {
-                _logger.LogInformation("System settings already exist in database");
+                _logger.LogTrace("System settings already exist in database");
             }
             else
             {
-                _logger.LogInformation("Adding system settings to database");
+                _logger.LogTrace("Adding system settings to database");
                 await _context.SystemSettings.AddAsync(systemSettings);
             }
         }

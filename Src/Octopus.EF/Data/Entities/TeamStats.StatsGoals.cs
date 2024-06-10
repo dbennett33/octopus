@@ -1,6 +1,5 @@
 namespace Octopus.EF.Data.Entities
 {
-    using System.Collections.Generic;
     using Microsoft.EntityFrameworkCore;
 
     /// <summary>

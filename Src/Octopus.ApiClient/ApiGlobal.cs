@@ -24,6 +24,7 @@ namespace Octopus.ApiClient
         {
             public const string NAME_CALL_LIMIT = "x-ratelimit-requests-limit";
             public const string NAME_CALLS_REMAINING = "x-ratelimit-requests-remaining";
+            public const string NAME_CALL_RESET = "x-ratelimit-requests-reset";
         }
     }
 }
