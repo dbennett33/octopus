@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Octopus.EF.Data.Entities;
 using Octopus.EF.Repositories.Interfaces;
+using Octopus.Importer.Services.Impl;
 using Octopus.Importer.Services.Interfaces;
 using Octopus.Sync.Services.Interfaces;
 
@@ -15,12 +16,18 @@ namespace Octopus.Sync.Services.Impl
         private readonly IRepositoryManager _repositoryManager;
         private readonly IImportCountryService _countryService;
         private readonly IImportLeagueService _leagueService;
+        private readonly IImportTeamService _teamService;
         private readonly ILogger<InstallerService> _logger;
 
-        public InstallerService(IImportCountryService countryService, IImportLeagueService leagueService, IRepositoryManager repositoryManager, ILogger<InstallerService> logger)
+        public InstallerService(IImportCountryService countryService,
+                                IImportLeagueService leagueService,
+                                IImportTeamService teamService,
+                                IRepositoryManager repositoryManager,
+                                ILogger<InstallerService> logger)
         {
             _countryService = countryService;
             _leagueService = leagueService;
+            _teamService = teamService;
             _repositoryManager = repositoryManager;
             _logger = logger;
         }
@@ -57,9 +64,33 @@ namespace Octopus.Sync.Services.Impl
                 throw new ArgumentNullException(nameof(installInfo));
             }
 
+            installInfo.TeamsInstalled = await InstallTeams(installInfo);
+
+             
+
+
             installInfo.InstallEndDate = DateTime.Now;
             installInfo.IsComplete = true;
             return installInfo;
+        }
+
+        private async Task<bool> InstallTeams(InstallInfo installInfo)
+        {
+            bool success = true;
+            if (!installInfo.TeamsInstalled)
+            {
+
+                foreach (var league in await _repositoryManager.Leagues.GetLeaguesAsync(true))
+                {
+                    var result = await _teamService.ImportTeamsByLeagueAsync(league.Id, "2023");
+                    if (!result)
+                    {
+                        success = false;
+                    }
+                }
+            }
+
+            return success;
         }
     }
 }

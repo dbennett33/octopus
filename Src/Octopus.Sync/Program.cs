@@ -3,14 +3,17 @@ using NLog;
 using NLog.Extensions.Logging;
 using Octopus.EF.Data;
 using Octopus.Sync.Configurations;
+using Octopus.Sync.Utils;
 using Octopus.Sync.Workers;
+using System;
 
 public class Program
 {
     public static void Main(string[] args)
     {
         var logger = LogManager.Setup().LoadConfigurationFromFile("nlog.config").GetCurrentClassLogger();
-        PrintBanner(logger);
+        logger.Info(LogUtils.GetBanner());
+       
 
         var builder = Host.CreateApplicationBuilder(args);
         ConfigureServices(builder);
@@ -59,20 +62,7 @@ public class Program
         });
     }
 
-    private static void PrintBanner(Logger logger)
-    {
-        System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
-        System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
-        string version = fvi.ProductVersion?.Substring(0, fvi.ProductVersion.IndexOf('+')) ?? string.Empty;
-        logger.Info(GetBanner(version));
-    }
 
-    private static string GetBanner(string version)
-    {
-        var banner = string.Format("\r\n///////////////////////////////////////\r\n///////////////////////////////////////\r\n   ____  " +
-            "     _                        \r\n  / __ \\     | |                       \r\n | |  | | ___| |_ ___  _ __  _   _ ___ \r\n | |  " +
-            "| |/ __| __/ _ \\| '_ \\| | | / __|\r\n | |__| | (__| || (_) | |_) | |_| \\__ \\\r\n  \\____/ \\___|\\__\\___/| .__/ \\__,_|___/\r\n " +
-            "                     | |              \r\n                      |_|  v{0}       \r\n\r\n///////////////////////////////////////\r\n///////////////////////////////////////", version);
-        return banner;
-    }
+
+
 }

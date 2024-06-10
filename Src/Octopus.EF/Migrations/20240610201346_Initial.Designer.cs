@@ -12,8 +12,8 @@ using Octopus.EF.Data;
 namespace Octopus.EF.Migrations
 {
     [DbContext(typeof(OctopusDbContext))]
-    [Migration("20240610171423_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240610201346_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -350,6 +350,9 @@ namespace Octopus.EF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("FixturesInstalled")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("InstallEndDate")
                         .HasColumnType("datetime2");
 
@@ -366,6 +369,9 @@ namespace Octopus.EF.Migrations
                     b.Property<int>("SystemSettingsId")
                         .HasColumnType("int")
                         .HasColumnName("SystemSettingsId");
+
+                    b.Property<bool>("TeamsInstalled")
+                        .HasColumnType("bit");
 
                     b.Property<int>("Version")
                         .HasMaxLength(50)
@@ -706,10 +712,9 @@ namespace Octopus.EF.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<string>("Capacity")
-                        .IsRequired()
+                    b.Property<int>("Capacity")
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("int");
 
                     b.Property<string>("City")
                         .IsRequired()

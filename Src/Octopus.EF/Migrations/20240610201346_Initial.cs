@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Octopus.EF.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -83,7 +83,7 @@ namespace Octopus.EF.Migrations
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Address = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     City = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Capacity = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Capacity = table.Column<int>(type: "int", maxLength: 50, nullable: false),
                     Surface = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Image = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false)
                 },
@@ -128,7 +128,9 @@ namespace Octopus.EF.Migrations
                     EnabledEntitiesApplied = table.Column<bool>(type: "bit", nullable: false),
                     EnabledEntitiesJson = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CountriesInstalled = table.Column<bool>(type: "bit", nullable: false),
-                    LeaguesInstalled = table.Column<bool>(type: "bit", nullable: false)
+                    LeaguesInstalled = table.Column<bool>(type: "bit", nullable: false),
+                    TeamsInstalled = table.Column<bool>(type: "bit", nullable: false),
+                    FixturesInstalled = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

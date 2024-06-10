@@ -33,7 +33,7 @@ namespace Octopus.EF.Data.Entities
         /// <summary>
         /// Gets or sets the capacity of the venue.
         /// </summary>
-        public string Capacity { get; set; } = string.Empty;
+        public int Capacity { get; set; }
 
         /// <summary>
         /// Gets or sets the surface of the venue.

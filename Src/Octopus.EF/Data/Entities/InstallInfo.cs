@@ -45,5 +45,7 @@ namespace Octopus.EF.Data.Entities
         /// Gets or sets a value indicating whether the leagues were installed.
         /// </summary>
         public bool LeaguesInstalled { get; set; }
+        public bool TeamsInstalled { get; set; }
+        public bool FixturesInstalled { get; set; }
     }
 }

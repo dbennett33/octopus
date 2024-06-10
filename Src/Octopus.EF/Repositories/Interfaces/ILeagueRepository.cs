@@ -9,7 +9,7 @@ namespace Octopus.EF.Repositories.Interfaces
         void DeleteLeague(League league);
         Task<bool> ExistsAsync(int leagueId);
         Task<League?> GetLeagueByIdAsync(int leagueId);
-        Task<IEnumerable<League>> GetLeaguesAsync();
+        Task<IEnumerable<League>> GetLeaguesAsync(bool enabledOnly);
         Task<IEnumerable<League>> GetLeaguesByCountryId(int countryId);
         void UpdateLeague(League league);
     }
