@@ -14,6 +14,7 @@ namespace Octopus.ApiClient.Services.Impl
     {
         private readonly IApiClientService _apiClient;
         private readonly ICountryMapper _countryMapper;
+
         private readonly ILogger<ApiCountryService> _logger;
         private readonly string _countriesEndpoint = ApiGlobal.Endpoints.COUNTRIES;
 
@@ -28,7 +29,6 @@ namespace Octopus.ApiClient.Services.Impl
         {
             try
             {
-                _logger.LogInformation("Calling API to get countries...");
                 var response = await _apiClient.GetAsync(_countriesEndpoint);
 
                 if (string.IsNullOrEmpty(response))
@@ -37,18 +37,14 @@ namespace Octopus.ApiClient.Services.Impl
                     throw new Exception("API response is null or empty");
                 }
 
-                _logger.LogInformation("Parsing JSON response...");
                 var apiResponse = JsonConvert.DeserializeObject<ApiResponse<ApiCountry>>(response);
                 if (apiResponse == null || apiResponse.Response == null)
                 {
                     throw new Exception("Failed to deserialize API response.");
                 }
-                _logger.LogInformation("JSON parsing completed.");
 
-                // Map to Country objects
                 var countries = _countryMapper.Map(apiResponse.Response);
-                _logger.LogInformation("Mapping completed.");
-        
+                
                 return countries;
             }
             catch (Exception ex)

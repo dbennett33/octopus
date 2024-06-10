@@ -126,6 +126,8 @@ public class InitializerService : IInitializerService
                     _logger.LogInformation("The system will be updated to reflect the new enabled entities");
                     var newInstallInfo = new InstallInfo
                     {
+                        CountriesInstalled = true,
+                        LeaguesInstalled = true,
                         SystemSettings = latest.SystemSettings,
                         SystemSettingsId = latest.SystemSettingsId,
                         Version = latest.Version + 1,     

@@ -12,7 +12,9 @@ namespace Octopus.Importer.Services.Impl
         private readonly IApiLeagueService _apiLeagueService;
         private readonly ILogger<ImportLeagueService> _logger;
 
-        public ImportLeagueService(IRepositoryManager repositoryManager, IApiLeagueService apiLeagueService, ILogger<ImportLeagueService> logger)
+        public ImportLeagueService(IRepositoryManager repositoryManager,
+                                   IApiLeagueService apiLeagueService,
+                                   ILogger<ImportLeagueService> logger)
         {
             _repositoryManager = repositoryManager;
             _apiLeagueService = apiLeagueService;

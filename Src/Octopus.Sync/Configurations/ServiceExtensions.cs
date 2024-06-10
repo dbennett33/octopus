@@ -46,9 +46,12 @@ namespace Octopus.Sync.Configurations
             });
 
             services.AddTransient<IApiCountryService, ApiCountryService>();
-            services.AddTransient<ICountryMapper, CountryMapper>();
             services.AddTransient<IApiLeagueService, ApiLeagueService>();
+            services.AddTransient<IApiTeamService, ApiTeamService>();
+
+            services.AddTransient<ICountryMapper, CountryMapper>();
             services.AddTransient<ILeagueMapper, LeagueMapper>();
+            services.AddTransient<ITeamMapper, TeamMapper>();
             services.AddSingleton<ApiState>();
 
             return services;
@@ -70,6 +73,7 @@ namespace Octopus.Sync.Configurations
         {
             services.AddScoped<IImportCountryService, ImportCountryService>();
             services.AddScoped<IImportLeagueService, ImportLeagueService>();
+            services.AddScoped<IImportTeamService, ImportTeamService>();
 
             return services;
         }

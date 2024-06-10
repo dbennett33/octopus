@@ -104,10 +104,21 @@ namespace Octopus.EF.Repositories.Impl
             return await _context.Leagues.FindAsync(leagueId);
         }
 
-        public async Task<IEnumerable<League>> GetLeaguesAsync()
+        public async Task<IEnumerable<League>> GetLeaguesAsync(bool enabledOnly = false)
         {
             _logger.LogInformation("Getting leagues from database");
-            return await _context.Leagues.ToListAsync();
+
+            var leagues = new List<League>();
+            if (enabledOnly)
+            {
+                leagues = await _context.Leagues.Where(l => l.IsEnabled).ToListAsync();
+            }
+            else
+            {
+                leagues = await _context.Leagues.ToListAsync();
+            }
+
+            return leagues;
         }
 
         public async Task<IEnumerable<League>> GetLeaguesByCountryId(int countryId)
