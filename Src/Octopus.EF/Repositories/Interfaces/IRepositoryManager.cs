@@ -10,6 +10,7 @@ namespace Octopus.EF.Repositories.Interfaces
     {
         ICountryRepository Countries { get; }
         ILeagueRepository Leagues { get; }
+        ITeamRepository Teams { get; }
         ISystemSettingsRepository SystemSettings { get; }
         IInstallInfoRepository InstallInfo { get; }
         Task<int> CompleteAsync();

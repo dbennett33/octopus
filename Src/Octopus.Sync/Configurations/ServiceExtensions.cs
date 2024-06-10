@@ -60,6 +60,7 @@ namespace Octopus.Sync.Configurations
             services.AddScoped<IInstallInfoRepository, InstallInfoRepository>();
             services.AddScoped<ICountryRepository, CountryRepository>();
             services.AddScoped<ILeagueRepository, LeagueRepository>();
+            services.AddScoped<ITeamRepository, TeamRepository>();
             services.AddScoped<IRepositoryManager, RepositoryManager>();
 
             return services;
