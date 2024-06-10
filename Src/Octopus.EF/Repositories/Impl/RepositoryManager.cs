@@ -12,6 +12,7 @@ namespace Octopus.EF.Repositories.Impl
         private readonly ILogger<RepositoryManager> _logger;
         private readonly ICountryRepository _countries;
         private readonly ILeagueRepository _leagues;
+        private readonly ITeamRepository _teams;
         private readonly ISystemSettingsRepository _systemSettings;
         private readonly IInstallInfoRepository _installInfo;
 
@@ -19,6 +20,7 @@ namespace Octopus.EF.Repositories.Impl
 
         public ICountryRepository Countries => _countries;
         public ILeagueRepository Leagues => _leagues;
+        public ITeamRepository Teams => _teams;
         public ISystemSettingsRepository SystemSettings => _systemSettings;
         public IInstallInfoRepository InstallInfo => _installInfo;
 
@@ -26,6 +28,7 @@ namespace Octopus.EF.Repositories.Impl
                                 ILogger<RepositoryManager> logger, 
                                 ICountryRepository countries, 
                                 ILeagueRepository leagues,
+                                ITeamRepository teams,
                                 ISystemSettingsRepository systemSettings,
                                 IInstallInfoRepository installInfo)
         {            
@@ -33,6 +36,7 @@ namespace Octopus.EF.Repositories.Impl
             _logger = logger;
             _countries = countries;
             _leagues = leagues;
+            _teams = teams;
             _systemSettings = systemSettings;
             _installInfo = installInfo;
         }
