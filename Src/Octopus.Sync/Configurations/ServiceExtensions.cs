@@ -18,6 +18,8 @@ using Octopus.Sync.Services.Interfaces;
 using System.Net.Http.Headers;
 using Hangfire.SqlServer;
 using Microsoft.Extensions.Options;
+using Octopus.Scheduler.Tasks.Interfaces;
+using Octopus.Scheduler.Tasks.Impl;
 
 namespace Octopus.Sync.Configurations
 {
@@ -84,14 +86,19 @@ namespace Octopus.Sync.Configurations
 
         public static IServiceCollection AddSchedulerServices(this IServiceCollection services)
         {
+            services.AddScoped<IScheduleManagerService, ScheduleManagerService>();
+            
             services.AddScoped<IScheduleCountryService, ScheduleCountryService>();
+            services.AddScoped<IScheduleLeagueService, ScheduleLeagueService>();
+
+            services.AddTransient<ITasksCountry, TasksCountry>();
+            services.AddTransient<ITasksLeague, TasksLeague>();
 
             return services;
         }
 
         public static IServiceCollection ConfigureHangfire(this IServiceCollection services, IConfiguration configuration)
-        {
-            var test = configuration["ConnectionStrings:HangfireConnection"];
+        {  
             services.AddHangfire(config => config
                 .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
                 .UseSimpleAssemblyNameTypeSerializer()
@@ -107,6 +114,7 @@ namespace Octopus.Sync.Configurations
                 }));
 
             services.AddHangfireServer();
+
 
             return services;
         }

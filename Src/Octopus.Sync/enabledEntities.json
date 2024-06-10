@@ -3,7 +3,7 @@
     "EnabledCountries": [
       {
         "Name": "England",
-        "Leagues": [ "Premier League", "Championship", "League One", "League Two" ]
+        "Leagues": ["Premier League", "Championship"]
       }   
     ]
   }

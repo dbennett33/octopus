@@ -48,12 +48,7 @@ namespace Octopus.ApiClient.Services.Impl
                 // Map to Country objects
                 var countries = _countryMapper.Map(apiResponse.Response);
                 _logger.LogInformation("Mapping completed.");
-
-                foreach (var c in countries)
-                {
-                    _logger.LogInformation(c.Name);
-                }
-
+        
                 return countries;
             }
             catch (Exception ex)

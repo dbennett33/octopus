@@ -32,7 +32,8 @@ namespace Octopus.EF.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Code = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
-                    Flag = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true)
+                    Flag = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    IsEnabled = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -99,6 +100,7 @@ namespace Octopus.EF.Migrations
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Logo = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    IsEnabled = table.Column<bool>(type: "bit", nullable: false),
                     CountryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -119,9 +121,12 @@ namespace Octopus.EF.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SystemSettingsId = table.Column<int>(type: "int", nullable: false),
-                    Version = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    InstallDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Version = table.Column<int>(type: "int", maxLength: 50, nullable: false),
+                    InstallStartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    InstallEndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsComplete = table.Column<bool>(type: "bit", nullable: false),
+                    EnabledEntitiesApplied = table.Column<bool>(type: "bit", nullable: false),
+                    EnabledEntitiesJson = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CountriesInstalled = table.Column<bool>(type: "bit", nullable: false),
                     LeaguesInstalled = table.Column<bool>(type: "bit", nullable: false)
                 },
