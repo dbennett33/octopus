@@ -23,14 +23,17 @@ namespace Octopus.EF.Data.Entities
         /// <summary>
         /// Gets or sets the version of the installation.
         /// </summary>
-        public string Version { get; set; } = string.Empty;
+        public int Version { get; set; }
 
         /// <summary>
         /// Gets or sets the date of the installation.
         /// </summary>
-        public DateTime InstallDate { get; set; }
+        public DateTime InstallStartDate { get; set; }
+        public DateTime InstallEndDate { get; set; }
 
         public bool IsComplete { get; set; }
+
+        public string EnabledEntitiesJson { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets a value indicating whether the countries were installed.

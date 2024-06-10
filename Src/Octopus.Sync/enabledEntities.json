@@ -3,8 +3,19 @@
     "EnabledCountries": [
       {
         "Name": "England",
-        "Leagues": [ "Premier League", "Championship" ]
-      }
+        "Leagues": [ "Premier League", "Championship", "League One", "League Two" ]
+      }   
     ]
   }
 }
+
+//{
+//  "EnabledEntities": {
+//    "EnabledCountries": [
+//      {
+//        "Name": "England",
+//        "Leagues": [ "Premier League", "Championship" ]
+//      }
+//    ]
+//  }
+//}

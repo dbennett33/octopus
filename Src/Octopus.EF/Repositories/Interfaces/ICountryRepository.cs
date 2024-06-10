@@ -13,6 +13,7 @@ namespace Octopus.EF.Repositories.Interfaces
         /// <returns>A task that represents the asynchronous operation. The task result contains the collection of countries.</returns>
         Task<IEnumerable<Country>> GetCountriesAsync();
 
+        Task<IEnumerable<Country>> GetCountriesIncludeLeaguesAsync();
         /// <summary>
         /// Retrieves a country by its ID asynchronously.
         /// </summary>
