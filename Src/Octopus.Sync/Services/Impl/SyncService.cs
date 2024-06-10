@@ -30,8 +30,7 @@ namespace Octopus.Sync.Services.Impl
 
         public async Task Init()
         {
-            await _initializerService.InitializeAsync();
-            await _countryScheduler.ScheduleRecurringCountryJobs();
+            await _initializerService.InitializeAsync();            
         }
     }
 }

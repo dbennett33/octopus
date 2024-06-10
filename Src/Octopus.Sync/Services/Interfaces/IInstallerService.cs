@@ -4,6 +4,7 @@ namespace Octopus.Sync.Services.Interfaces
 {
     public interface IInstallerService
     {
-        Task Install(InstallInfo installInfo);
+        Task<InstallInfo> InstallStageOne(InstallInfo installInfo);
+        Task<InstallInfo> InstallStageTwo(InstallInfo installInfo);
     }
 }

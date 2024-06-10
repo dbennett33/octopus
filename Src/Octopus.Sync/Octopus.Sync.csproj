@@ -13,16 +13,12 @@
 	</PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="appsettings.Development.json" />
     <Content Remove="appsettings.json" />
     <Content Remove="appsettings.test.json" />
     <Content Remove="nlog.config" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="appsettings.Development.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -48,5 +44,11 @@
     <ProjectReference Include="..\Octopus.EF\Octopus.EF.csproj" />
     <ProjectReference Include="..\Octopus.Importer\Octopus.Importer.csproj" />
     <ProjectReference Include="..\Octopus.Scheduler\Octopus.Scheduler.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="enabledEntities.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

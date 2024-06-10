@@ -3,6 +3,7 @@ namespace Octopus.ApiClient.Services.Impl
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
     using Octopus.ApiClient.Mappers.Interfaces;
     using Octopus.ApiClient.Models;
@@ -13,35 +14,36 @@ namespace Octopus.ApiClient.Services.Impl
     {
         private readonly IApiClientService _apiClient;
         private readonly ILeagueMapper _leagueMapper;
+        private readonly ILogger<ApiLeagueService> _logger;
         private readonly string _leaguesEndpoint = "leagues";
 
-        public ApiLeagueService(IApiClientService apiClient, ILeagueMapper leagueMapper)
+        public ApiLeagueService(IApiClientService apiClient, ILeagueMapper leagueMapper, ILogger<ApiLeagueService> logger)
         {
             _apiClient = apiClient;
             _leagueMapper = leagueMapper;
+            _logger = logger;
         }
 
         public async Task<IEnumerable<League>> GetLeaguesAsync()
         {
             try
             {
-                Console.WriteLine("Calling API to get leagues..."); 
+                _logger.LogInformation("Calling API to get leagues..."); 
                 var response = await _apiClient.GetAsync(_leaguesEndpoint);
-                Console.WriteLine("API call completed.");
 
                 if (string.IsNullOrEmpty(response))
                 {
-                    Console.WriteLine("API response is null or empty.");
+                    _logger.LogError("API response is null or empty.");
                     throw new Exception("API response is null or empty");
                 }
 
-                Console.WriteLine("Parsing JSON response...");
+                _logger.LogInformation("Parsing JSON response...");
                 var apiResponse = JsonConvert.DeserializeObject<ApiResponse<ApiLeague>>(response);
                 if (apiResponse == null || apiResponse.Response == null || apiResponse.Response.Count == 0)
                 {
                     throw new Exception("Failed to deserialize API response.");
                 }
-                Console.WriteLine("JSON parsing completed.");
+                _logger.LogInformation("JSON parsing completed.");
 
                 // Map to League objects
                 var leagues = new List<League>();
@@ -49,13 +51,13 @@ namespace Octopus.ApiClient.Services.Impl
                 {
                     leagues.Add(_leagueMapper.Map(apiLeague));
                 }
-                Console.WriteLine("Mapping completed.");
+                _logger.LogInformation("Mapping completed.");
 
                 return leagues;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error fetching leagues: {ex.Message}");
+                _logger.LogError($"Error fetching leagues: {ex.Message}");
                 throw;
             }
         }
@@ -64,33 +66,34 @@ namespace Octopus.ApiClient.Services.Impl
         {
             try
             {
-                Console.WriteLine("Calling API to get league...");
+                _logger.LogInformation("Calling API to get league...");
                 var response = await _apiClient.GetAsync($"{_leaguesEndpoint}?id={leagueId}");
-                Console.WriteLine("API call completed.");
+                _logger.LogInformation("API call completed.");
 
                 if (string.IsNullOrEmpty(response))
                 {
-                    Console.WriteLine("API response is null or empty.");
+                    _logger.LogError("API response is null or empty.");
                     throw new Exception("API response is null or empty");
                 }
 
-                Console.WriteLine("Parsing JSON response...");
+                _logger.LogInformation("Parsing JSON response...");
                 var apiResponse = JsonConvert.DeserializeObject<ApiResponse<ApiLeague>>(response);
                 if (apiResponse == null || apiResponse.Response == null || apiResponse.Response.Count == 0)
                 {
+                    _logger.LogError("Failed to deserialize API response.");
                     throw new Exception("Failed to deserialize API response.");
                 }
-                Console.WriteLine("JSON parsing completed.");
+                _logger.LogInformation("JSON parsing completed.");
 
                 // Map to League object
                 var league = _leagueMapper.Map(apiResponse.Response[0]);
-                Console.WriteLine("Mapping completed.");
+                _logger.LogInformation("Mapping completed.");
 
                 return league;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error fetching league: {ex.Message}");
+                _logger.LogError($"Error fetching league: {ex.Message}");
                 throw;
             }
         }

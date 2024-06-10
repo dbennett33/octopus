@@ -22,7 +22,7 @@ namespace Octopus.EF.Repositories.Impl
         {
 
             _logger.LogInformation("Getting system settings from database");
-            var settings = await _context.SystemSettings.FirstOrDefaultAsync();
+            var settings = await _context.FindAsync<SystemSettings>(1);
 
             return settings!;
         }
@@ -35,7 +35,7 @@ namespace Octopus.EF.Repositories.Impl
         
         public async Task AddSystemSettingsAsync(SystemSettings systemSettings)
         {
-            var exists = await GetSystemSettingsAsync();
+            var exists = await _context.SystemSettings.FindAsync(1);
             if (exists != null)
             {
                 _logger.LogInformation("System settings already exist in database");

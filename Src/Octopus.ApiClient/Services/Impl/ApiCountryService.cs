@@ -30,7 +30,6 @@ namespace Octopus.ApiClient.Services.Impl
             {
                 _logger.LogInformation("Calling API to get countries...");
                 var response = await _apiClient.GetAsync(_countriesEndpoint);
-                _logger.LogInformation("API call completed.");
 
                 if (string.IsNullOrEmpty(response))
                 {

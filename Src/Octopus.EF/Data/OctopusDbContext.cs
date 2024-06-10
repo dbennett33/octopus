@@ -3,7 +3,7 @@ using Octopus.EF.Data.Configurations;
 namespace Octopus.EF.Data
 {
     using Microsoft.EntityFrameworkCore;
-    using Octopus.EF.Data.Configuration;
+    using Octopus.EF.Data.Configurations;
     using Octopus.EF.Data.Entities;
 
     /// <summary>

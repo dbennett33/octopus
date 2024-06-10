@@ -27,6 +27,8 @@ namespace Octopus.EF.Data.Entities
         /// </summary>
         public string Logo { get; set; } = string.Empty;
 
+        public bool IsEnabled { get; set; }
+
         /// <summary>
         /// Gets or sets the ID of the country associated with the league.
         /// </summary>

@@ -22,30 +22,31 @@ namespace Octopus.EF.Repositories.Impl
             _logger = logger;
         }
 
-        public async Task AddLeagueAsync(League league)
+        public async Task AddOrUpdateLeagueAsync(League league)
         {
-            var exists = await ExistsAsync(league.Id);
-            if (exists)
+            if (league.CountryId == 0)
             {
-                _logger.LogInformation($"League [{league.Name}] already exists in database");
+                _logger.LogInformation($"Country ID is not set for league [{league.Name}]");
+                var existingCountry = await _context.Countries
+                    .FirstOrDefaultAsync(c => c.Name == (league.Country != null ? league.Country.Name : null));
+
+                if (existingCountry != null)
+                {
+                    // Attach the existing country to the league
+                    _logger.LogInformation($"Attaching existing country [{existingCountry.Name}] to league [{league.Name}]");
+                    league.CountryId = existingCountry.Id;
+                    league.Country = existingCountry;
+                }
+            }
+
+            var existingLeague = await _context.Leagues.FindAsync(league.Id);
+            if (existingLeague != null)
+            {
+                _logger.LogInformation($"League [{league.Name}] already exists in database - updating");
+                _context.Entry(existingLeague).CurrentValues.SetValues(league);
             }
             else
             {
-                if (league.CountryId == 0)
-                {
-                    _logger.LogInformation($"Country ID is not set for league [{league.Name}]");
-                    var existingCountry = await _context.Countries
-                        .FirstOrDefaultAsync(c => c.Name == (league.Country != null ? league.Country.Name : null));
-
-                    if (existingCountry != null)
-                    {
-                        // Attach the existing country to the league
-                        _logger.LogInformation($"Attaching existing country [{existingCountry.Name}] to league [{league.Name}]");
-                        league.CountryId = existingCountry.Id;
-                        league.Country = existingCountry;
-                    }
-                }
-
                 _logger.LogInformation($"Adding league [{league.Name}] to database");
                 await _context.Leagues.AddAsync(league);
             }

@@ -26,7 +26,7 @@ namespace Octopus.ApiClient.Models
 
     public class Coverage
     {
-        public Fixtures? Fixtures { get; set; }
+        public CoverageFixtures? Fixtures { get; set; }
         public bool Standings { get; set; }
         public bool Players { get; set; }
         public bool TopScorers { get; set; }
@@ -37,7 +37,7 @@ namespace Octopus.ApiClient.Models
         public bool Odds { get; set; }
     }
 
-    public class Fixtures
+    public class CoverageFixtures
     {
         public bool Events { get; set; }
         public bool Lineups { get; set; }

@@ -20,11 +20,13 @@ namespace Octopus.Scheduler.Services.Impl
 
         public async Task ScheduleRecurringCountryJobs()
         {
-            RecurringJob.AddOrUpdate(
-                "daily-sync-task",
-                () => new TasksCountry().GetCountries(),
-                Cron.Minutely);    
-
+            await Task.Run(() =>
+            {
+                RecurringJob.AddOrUpdate(
+                    "weekly-sync-countries",
+                    () => new TasksCountry().GetCountries(),
+                    Cron.Weekly);
+            });
         }
     }
 }   

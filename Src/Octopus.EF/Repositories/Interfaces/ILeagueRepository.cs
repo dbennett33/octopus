@@ -4,7 +4,7 @@ namespace Octopus.EF.Repositories.Interfaces
 {
     public interface ILeagueRepository
     {
-        Task AddLeagueAsync(League league);
+        Task AddOrUpdateLeagueAsync(League league);
         Task AddLeagueRangeAsync(IEnumerable<League> leagues);
         void DeleteLeague(League league);
         Task<bool> ExistsAsync(int leagueId);

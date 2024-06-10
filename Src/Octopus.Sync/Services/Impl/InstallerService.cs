@@ -25,12 +25,12 @@ namespace Octopus.Sync.Services.Impl
             _logger = logger;
         }
 
-        public async Task Install(InstallInfo installInfo)
+        public async Task<InstallInfo> InstallStageOne(InstallInfo installInfo)
         {
             if (installInfo == null)
             {
                 throw new ArgumentNullException(nameof(installInfo));
-            }            
+            }
 
             if (!installInfo.CountriesInstalled)
             {
@@ -43,7 +43,21 @@ namespace Octopus.Sync.Services.Impl
                 await _repositoryManager.BeginTransactionAsync();
                 installInfo.LeaguesInstalled = await _leagueService.ImportLeagues();
                 await _repositoryManager.CommitTransactionAsync();
-            } 
+            }
+
+            return installInfo;
+        }
+
+        public async Task<InstallInfo> InstallStageTwo(InstallInfo installInfo)
+        {
+            if (installInfo == null)
+            {
+                throw new ArgumentNullException(nameof(installInfo));
+            }            
+
+        
+
+            return installInfo;
         }
     }
 }

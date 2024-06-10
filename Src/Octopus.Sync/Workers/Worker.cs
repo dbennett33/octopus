@@ -1,6 +1,6 @@
 using Octopus.Sync.Services.Interfaces;
 
-namespace Octopus.Sync
+namespace Octopus.Sync.Workers
 {
     public class Worker : BackgroundService
     {
@@ -30,10 +30,10 @@ namespace Octopus.Sync
                 {
                     var syncService = scope.ServiceProvider.GetRequiredService<ISyncService>();
                     await syncService.Run();
-                }                  
-                
+                }
+
                 await Task.Delay(1000, stoppingToken);
             }
-        }        
+        }
     }
 }

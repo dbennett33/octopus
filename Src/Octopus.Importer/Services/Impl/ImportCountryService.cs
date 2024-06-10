@@ -30,24 +30,12 @@ namespace Octopus.Importer.Services.Impl
             bool success = false;
 
             try
-            {
-                var apiCountries = await _apiCountryService.GetCountriesAsync();
-                var dbCountries = await _repositoryManager.Countries.GetCountriesAsync();
-                var countriesToAdd = new List<Country>();
-
-                foreach (var country in apiCountries)
+            {    
+                foreach (var country in await _apiCountryService.GetCountriesAsync())
                 {
-                    if (!dbCountries.Any(c => c.Name == country.Name))
-                    {
-                        countriesToAdd.Add(country);
-                    }
-                    else
-                    {
-                        _repositoryManager.Countries.UpdateCountry(country);
-                    }
+                    await _repositoryManager.Countries.AddOrUpdateCountryAsync(country);
                 }
 
-                await _repositoryManager.Countries.AddCountryRangeAsync(countriesToAdd);
                 success = true;
             }
             catch (Exception ex)

@@ -1,7 +1,9 @@
+using Microsoft.Extensions.Options;
 using Octopus.ApiClient.Services.Impl;
 using Octopus.ApiClient.Services.Interfaces;
 using Octopus.EF.Data.Entities;
 using Octopus.EF.Repositories.Interfaces;
+using Octopus.Sync.Configurations;
 using Octopus.Sync.Services.Interfaces;
 
 namespace Octopus.Sync.Services.Impl;
@@ -11,28 +13,38 @@ public class InitializerService : IInitializerService
     private readonly IRepositoryManager _repositoryManager;
     private readonly IApiClientService _apiClientService;
     private readonly IInstallerService _installerService;
+    private readonly EnabledEntitiesConfig _enabledEntitiesConfig;
     private readonly ILogger<InitializerService> _logger;
 
     private SystemSettings? _systemSettings;
     private InstallInfo? _installInfo;
     private bool _needsInstall = true;
 
-    public InitializerService(IRepositoryManager repositoryManager, IApiClientService apiClientService, IInstallerService installerService, ILogger<InitializerService> logger)
+    public InitializerService(IRepositoryManager repositoryManager, IApiClientService apiClientService, IInstallerService installerService, IOptions<EnabledEntitiesConfig> enabledEntitiesConfig, ILogger<InitializerService> logger)
     {
         _repositoryManager = repositoryManager;
         _apiClientService = apiClientService;
         _installerService = installerService;
+        _enabledEntitiesConfig = enabledEntitiesConfig.Value;
         _logger = logger;
     }
 
     public async Task InitializeAsync()
     {
         await InitDatabase();
-        await InitSystemSettings();
+        await InitSystemSettings();        
+
+        // Need to install Countries and Leagues before we can initialize enabled entities
+        if (_needsInstall)
+        {
+            _installInfo = await _installerService.InstallStageOne(_installInfo!);
+        }
+
+        await InitEnabledEntities();
 
         if (_needsInstall)
         {
-            await _installerService.Install(_installInfo!);
+
         }
     }
 
@@ -48,7 +60,7 @@ public class InitializerService : IInitializerService
                 systemSettings.CurrentVersion = "0.0.1";
 
                 await _repositoryManager.SystemSettings.AddSystemSettingsAsync(systemSettings);
-                await _repositoryManager.CompleteAsync();
+                 await _repositoryManager.CompleteAsync();
             }
 
             if (systemSettings != null)
@@ -116,5 +128,70 @@ public class InitializerService : IInitializerService
             throw;
         }
         _logger.LogInformation("Database initialized");
+    }
+
+    private async Task InitEnabledEntities()
+    {
+        if (_enabledEntitiesConfig.EnabledCountries == null)
+        {
+            _logger.LogError("No enabled countries found in configuration");
+            throw new Exception("No enabled countries found in configuration");
+        }
+        else
+        {
+            try
+            {
+                await _repositoryManager.BeginTransactionAsync();
+
+                foreach (var enabledCountry in _enabledEntitiesConfig.EnabledCountries)
+                {
+                    if (enabledCountry.Name == null)
+                    {
+                        _logger.LogError("Country name not found in configuration");
+                        throw new Exception("Country name not found in configuration");
+                    }
+                    else
+                    {
+                        var country = await _repositoryManager.Countries.GetCountryByNameIncludeLeaguesAsync(enabledCountry.Name);
+                        if (country == null)
+                        {
+                            _logger.LogError($"Country [{enabledCountry.Name}] not found in database");
+                            throw new Exception($"Country [{enabledCountry.Name}] not found in database");
+                        }
+                        else
+                        {
+                            
+                            country.IsEnabled = true;
+
+                            foreach (var enabledLeague in enabledCountry.Leagues)
+                            {
+                                var league = country.Leagues.FirstOrDefault(l => l.Name == enabledLeague);
+
+                                if (league == null)
+                                {
+                                    _logger.LogError($"League [{enabledLeague}] not found in database");
+                                    throw new Exception($"League [{enabledLeague}] not found in database");
+                                }
+                                else
+                                {
+                                    league.IsEnabled = true;
+                                }
+                            }
+
+                            await _repositoryManager.Countries.AddOrUpdateCountryAsync(country);
+                        }
+                    }
+                }
+
+                await _repositoryManager.CommitTransactionAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to initialize enabled entities");
+                await _repositoryManager.RollbackTransactionAsync();
+                throw;
+            }
+  
+        }
     }
 }
