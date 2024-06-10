@@ -12,8 +12,8 @@ using Octopus.EF.Data;
 namespace Octopus.EF.Migrations
 {
     [DbContext(typeof(OctopusDbContext))]
-    [Migration("20240610160335_ChangedInstallInfoStartEndDate")]
-    partial class ChangedInstallInfoStartEndDate
+    [Migration("20240610171423_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -343,6 +343,9 @@ namespace Octopus.EF.Migrations
                         .HasColumnType("bit")
                         .HasColumnName("CountriesInstalled");
 
+                    b.Property<bool>("EnabledEntitiesApplied")
+                        .HasColumnType("bit");
+
                     b.Property<string>("EnabledEntitiesJson")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -351,8 +354,7 @@ namespace Octopus.EF.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("InstallStartDate")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("InstallDate");
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsComplete")
                         .HasColumnType("bit");

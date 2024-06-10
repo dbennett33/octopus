@@ -10,18 +10,18 @@ using Octopus.Scheduler.Tasks.Interfaces;
 
 namespace Octopus.Scheduler.Services.Impl
 {
-    public class ScheduleCountryService : IScheduleCountryService
+    public class ScheduleLeagueService : IScheduleLeagueService
     {
         private readonly IRecurringJobManager _recurringJobManager;
-        private readonly ITasksCountry _tasksCountry;
+        private readonly ITasksLeague _tasksLeague;
 
-        public ScheduleCountryService(IRecurringJobManager recurringJobManager, ITasksCountry tasksCountry)
+        public ScheduleLeagueService(IRecurringJobManager recurringJobManager, ITasksLeague tasksLeague)
         {
             _recurringJobManager = recurringJobManager;
-            _tasksCountry = tasksCountry;
+            _tasksLeague = tasksLeague;
         }
 
-        public async Task ScheduleRecurringCountryJobs()
+        public async Task ScheduleRecurringLeagueJobs()
         {
             RecurringJobOptions jobOptions = new()
             {
@@ -31,10 +31,10 @@ namespace Octopus.Scheduler.Services.Impl
             await Task.Run(() =>
             {
                 RecurringJob.AddOrUpdate(
-                    "weekly-sync-countries",
-                    () => _tasksCountry.GetCountries(),
+                    "weekly-sync-leagues",
+                    () => _tasksLeague.GetLeagues(),
                     Cron.Weekly, jobOptions);
-            }); 
+            });
         }
     }
-}   
+}

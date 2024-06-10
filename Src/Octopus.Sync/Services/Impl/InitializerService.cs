@@ -3,6 +3,7 @@ using Octopus.ApiClient.Services.Impl;
 using Octopus.ApiClient.Services.Interfaces;
 using Octopus.EF.Data.Entities;
 using Octopus.EF.Repositories.Interfaces;
+using Octopus.Scheduler.Services.Interfaces;
 using Octopus.Sync.Configurations;
 using Octopus.Sync.Services.Interfaces;
 using System.Text.Json;
@@ -15,19 +16,25 @@ public class InitializerService : IInitializerService
     private readonly IApiClientService _apiClientService;
     private readonly IInstallerService _installerService;
     private readonly EnabledEntitiesConfig _enabledEntitiesConfig;
+    private readonly IScheduleManagerService _scheduleManagerService;
     private readonly ILogger<InitializerService> _logger;
 
     private SystemSettings? _systemSettings;
     private InstallInfo? _installInfo;
     private bool _needsInstall = true;
-    private bool _needsUpdate = false;
 
-    public InitializerService(IRepositoryManager repositoryManager, IApiClientService apiClientService, IInstallerService installerService, IOptions<EnabledEntitiesConfig> enabledEntitiesConfig, ILogger<InitializerService> logger)
+    public InitializerService(IRepositoryManager repositoryManager,
+                              IApiClientService apiClientService,
+                              IInstallerService installerService,
+                              IOptions<EnabledEntitiesConfig> enabledEntitiesConfig,
+                              IScheduleManagerService scheduleManagerService,
+                              ILogger<InitializerService> logger)
     {
         _repositoryManager = repositoryManager;
         _apiClientService = apiClientService;
         _installerService = installerService;
         _enabledEntitiesConfig = enabledEntitiesConfig.Value;
+        _scheduleManagerService = scheduleManagerService;
         _logger = logger;
     }
 
@@ -40,14 +47,36 @@ public class InitializerService : IInitializerService
         // Need to install Countries and Leagues before we can initialize enabled entities
         if (_needsInstall)
         {
-            _installInfo = await _installerService.InstallStageOne(_installInfo!);
+            await Install();
         }
 
-        await InitEnabledEntities();   
+        await InitRecurringTasks();
 
-        if (_needsInstall)
+    }
+
+    private async Task InitRecurringTasks()
+    {
+        await _scheduleManagerService.CountryScheduler.ScheduleRecurringCountryJobs();
+        await _scheduleManagerService.LeagueScheduler.ScheduleRecurringLeagueJobs();
+    }
+
+    private async Task Install()
+    {
+        _installInfo = await _installerService.InstallStageOne(_installInfo!);
+
+        await InitEnabledEntities();
+
+        _installInfo = await _installerService.InstallStageTwo(_installInfo!);
+
+        if (_installInfo.IsComplete)
         {
-
+            _repositoryManager.InstallInfo.UpdateInstallInfoAsync(_installInfo);
+            await _repositoryManager.CompleteAsync();
+            _logger.LogInformation("Install complete");
+        }
+        else
+        {
+            _logger.LogError("Install failed");
         }
     }
 
@@ -99,9 +128,7 @@ public class InitializerService : IInitializerService
                     {
                         SystemSettings = latest.SystemSettings,
                         SystemSettingsId = latest.SystemSettingsId,
-                        Version = latest.Version + 1,
-                        CountriesInstalled = true,
-                        LeaguesInstalled = true,
+                        Version = latest.Version + 1,     
                         EnabledEntitiesJson = enabledEntitiesJson,
                         InstallStartDate = DateTime.Now
                     };
@@ -109,10 +136,9 @@ public class InitializerService : IInitializerService
                     await _repositoryManager.InstallInfo.AddInstallInfoAsync(newInstallInfo);
                     await _repositoryManager.CompleteAsync();
 
-                    _installInfo = newInstallInfo;
+                    _installInfo = newInstallInfo;         
                 }
-
-                if (latest.IsComplete)
+                else if (latest.IsComplete)
                 {
                     _needsInstall = false;
                     _logger.LogInformation("Current version is upto date - no install required");
@@ -130,7 +156,7 @@ public class InitializerService : IInitializerService
             _installInfo = new InstallInfo();
             _installInfo.SystemSettings = _systemSettings;
             _installInfo.SystemSettingsId = _systemSettings!.Id;
-            _installInfo.Version = 0;
+            _installInfo.Version = 1;
             _installInfo.EnabledEntitiesJson = JsonSerializer.Serialize(_enabledEntitiesConfig);
             _installInfo.InstallStartDate = DateTime.Now;
 
@@ -221,7 +247,10 @@ public class InitializerService : IInitializerService
                     }
                 }
 
+                _installInfo!.EnabledEntitiesApplied = true;
+
                 await _repositoryManager.CommitTransactionAsync();
+                
             }
             catch (Exception ex)
             {

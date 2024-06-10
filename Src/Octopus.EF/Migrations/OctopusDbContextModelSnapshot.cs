@@ -340,6 +340,9 @@ namespace Octopus.EF.Migrations
                         .HasColumnType("bit")
                         .HasColumnName("CountriesInstalled");
 
+                    b.Property<bool>("EnabledEntitiesApplied")
+                        .HasColumnType("bit");
+
                     b.Property<string>("EnabledEntitiesJson")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -348,8 +351,7 @@ namespace Octopus.EF.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("InstallStartDate")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("InstallDate");
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsComplete")
                         .HasColumnType("bit");

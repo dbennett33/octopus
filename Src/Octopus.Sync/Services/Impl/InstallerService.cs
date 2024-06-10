@@ -32,6 +32,8 @@ namespace Octopus.Sync.Services.Impl
                 throw new ArgumentNullException(nameof(installInfo));
             }
 
+            await _repositoryManager.BeginTransactionAsync();
+
             if (!installInfo.CountriesInstalled)
             {
                 installInfo.CountriesInstalled = await _countryService.ImportCountries();
@@ -39,11 +41,11 @@ namespace Octopus.Sync.Services.Impl
             }
 
             if (!installInfo.LeaguesInstalled)
-            {
-                await _repositoryManager.BeginTransactionAsync();
-                installInfo.LeaguesInstalled = await _leagueService.ImportLeagues();
-                await _repositoryManager.CommitTransactionAsync();
+            {                
+                installInfo.LeaguesInstalled = await _leagueService.ImportLeagues();                
             }
+
+            await _repositoryManager.CommitTransactionAsync();
 
             return installInfo;
         }
@@ -53,10 +55,10 @@ namespace Octopus.Sync.Services.Impl
             if (installInfo == null)
             {
                 throw new ArgumentNullException(nameof(installInfo));
-            }            
+            }
 
-        
-
+            installInfo.InstallEndDate = DateTime.Now;
+            installInfo.IsComplete = true;
             return installInfo;
         }
     }

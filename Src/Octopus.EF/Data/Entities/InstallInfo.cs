@@ -32,6 +32,7 @@ namespace Octopus.EF.Data.Entities
         public DateTime InstallEndDate { get; set; }
 
         public bool IsComplete { get; set; }
+        public bool EnabledEntitiesApplied { get; set; }
 
         public string EnabledEntitiesJson { get; set; } = string.Empty;
 

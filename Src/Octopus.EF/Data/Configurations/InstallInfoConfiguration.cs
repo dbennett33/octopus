@@ -24,10 +24,6 @@ public class InstallInfoConfiguration : IEntityTypeConfiguration<InstallInfo>
             .HasMaxLength(50)
             .IsRequired();
 
-        builder.Property(e => e.InstallStartDate)
-            .HasColumnName("InstallDate")
-            .IsRequired();
-
         builder.Property(e => e.CountriesInstalled)
             .HasColumnName("CountriesInstalled")
             .IsRequired();
