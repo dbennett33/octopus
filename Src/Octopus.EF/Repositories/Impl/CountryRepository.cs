@@ -23,6 +23,12 @@ public class CountryRepository : ICountryRepository, IDisposable
         return await _context.Countries.ToListAsync();
     }
 
+    public async Task<IEnumerable<Country>> GetCountriesIncludeLeaguesAsync()
+    {
+        _logger.LogInformation("Getting countries from database");
+        return await _context.Countries.Include(c => c.Leagues).ToListAsync();
+    }
+
     public async Task<Country?> GetCountryByIdAsync(int countryId)
     {
         _logger.LogInformation($"Getting country by ID from database - [{countryId}]");

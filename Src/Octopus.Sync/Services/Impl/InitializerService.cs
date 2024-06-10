@@ -5,6 +5,7 @@ using Octopus.EF.Data.Entities;
 using Octopus.EF.Repositories.Interfaces;
 using Octopus.Sync.Configurations;
 using Octopus.Sync.Services.Interfaces;
+using System.Text.Json;
 
 namespace Octopus.Sync.Services.Impl;
 
@@ -19,6 +20,7 @@ public class InitializerService : IInitializerService
     private SystemSettings? _systemSettings;
     private InstallInfo? _installInfo;
     private bool _needsInstall = true;
+    private bool _needsUpdate = false;
 
     public InitializerService(IRepositoryManager repositoryManager, IApiClientService apiClientService, IInstallerService installerService, IOptions<EnabledEntitiesConfig> enabledEntitiesConfig, ILogger<InitializerService> logger)
     {
@@ -32,7 +34,8 @@ public class InitializerService : IInitializerService
     public async Task InitializeAsync()
     {
         await InitDatabase();
-        await InitSystemSettings();        
+        await InitSystemSettings();
+        await InitInstallData();
 
         // Need to install Countries and Leagues before we can initialize enabled entities
         if (_needsInstall)
@@ -40,7 +43,7 @@ public class InitializerService : IInitializerService
             _installInfo = await _installerService.InstallStageOne(_installInfo!);
         }
 
-        await InitEnabledEntities();
+        await InitEnabledEntities();   
 
         if (_needsInstall)
         {
@@ -57,36 +60,18 @@ public class InitializerService : IInitializerService
             if (systemSettings == null)
             {
                 systemSettings = new SystemSettings();
-                systemSettings.CurrentVersion = "0.0.1";
+                systemSettings.CurrentVersion = "0";
 
                 await _repositoryManager.SystemSettings.AddSystemSettingsAsync(systemSettings);
-                 await _repositoryManager.CompleteAsync();
+                await _repositoryManager.CompleteAsync();
             }
 
             if (systemSettings != null)
             {
                 _systemSettings = systemSettings;
-                _logger.LogInformation($"System exists - v{_systemSettings.CurrentVersion}");
-
-                var installData = await _repositoryManager.InstallInfo.GetAllInstallInfoAsync();
-
-                if (installData.Count != 0)
-                {
-                    ScanInstallData(installData);
-                }
-                else
-                {
-                    _logger.LogInformation("No InstallData found - install required");
-                    _installInfo = new InstallInfo();
-                    _installInfo.SystemSettings = systemSettings;
-                    _installInfo.SystemSettingsId = _systemSettings.Id;
-                    _installInfo.Version = "0.0.1";
-
-                    await _repositoryManager.InstallInfo.AddInstallInfoAsync(_installInfo);
-                    await _repositoryManager.CompleteAsync();
-                }
+                _logger.LogInformation($"System exists - v{_systemSettings.CurrentVersion}");               
             }
-            
+
         }
         catch (Exception ex)
         {
@@ -95,23 +80,62 @@ public class InitializerService : IInitializerService
         }
     }
 
-    private void ScanInstallData(List<InstallInfo> installData)
+    private async Task InitInstallData()
     {
-        foreach (var install in installData)
+        var installData = await _repositoryManager.InstallInfo.GetAllInstallInfoAsync();
+
+        if (installData.Count != 0)
         {
-            if (_systemSettings?.CurrentVersion == install.Version)
+            var latest = installData.OrderByDescending(i => i.Version).First();
+            if (latest != null)
             {
-                if (install.IsComplete)
+                string enabledEntitiesJson = JsonSerializer.Serialize(_enabledEntitiesConfig);
+
+                if (string.Compare(enabledEntitiesJson, latest.EnabledEntitiesJson) != 0)
+                {
+                    _logger.LogInformation("Enabled entities json config has changed");
+                    _logger.LogInformation("The system will be updated to reflect the new enabled entities");
+                    var newInstallInfo = new InstallInfo
+                    {
+                        SystemSettings = latest.SystemSettings,
+                        SystemSettingsId = latest.SystemSettingsId,
+                        Version = latest.Version + 1,
+                        CountriesInstalled = true,
+                        LeaguesInstalled = true,
+                        EnabledEntitiesJson = enabledEntitiesJson,
+                        InstallStartDate = DateTime.Now
+                    };
+
+                    await _repositoryManager.InstallInfo.AddInstallInfoAsync(newInstallInfo);
+                    await _repositoryManager.CompleteAsync();
+
+                    _installInfo = newInstallInfo;
+                }
+
+                if (latest.IsComplete)
                 {
                     _needsInstall = false;
                     _logger.LogInformation("Current version is upto date - no install required");
                 }
                 else
                 {
-                    _installInfo = install;
+                    _installInfo = latest;
                     _logger.LogInformation("Partial install required");
                 }
             }
+        }
+        else
+        {
+            _logger.LogInformation("No InstallData found - install required");
+            _installInfo = new InstallInfo();
+            _installInfo.SystemSettings = _systemSettings;
+            _installInfo.SystemSettingsId = _systemSettings!.Id;
+            _installInfo.Version = 0;
+            _installInfo.EnabledEntitiesJson = JsonSerializer.Serialize(_enabledEntitiesConfig);
+            _installInfo.InstallStartDate = DateTime.Now;
+
+            await _repositoryManager.InstallInfo.AddInstallInfoAsync(_installInfo);
+            await _repositoryManager.CompleteAsync();
         }
     }
 
@@ -143,6 +167,19 @@ public class InitializerService : IInitializerService
             {
                 await _repositoryManager.BeginTransactionAsync();
 
+                // Reset all countries and leagues to disabled
+                var countries = await _repositoryManager.Countries.GetCountriesIncludeLeaguesAsync();
+                foreach (var country in countries)
+                {
+                    country.IsEnabled = false;
+                    foreach (var league in country.Leagues)
+                    {
+                        league.IsEnabled = false;
+                    }
+                    await _repositoryManager.Countries.AddOrUpdateCountryAsync(country);
+                    await _repositoryManager.CompleteAsync();
+                }
+                            
                 foreach (var enabledCountry in _enabledEntitiesConfig.EnabledCountries)
                 {
                     if (enabledCountry.Name == null)
@@ -160,7 +197,7 @@ public class InitializerService : IInitializerService
                         }
                         else
                         {
-                            
+                            _logger.LogInformation($"Country enabled - [{enabledCountry.Name}]");
                             country.IsEnabled = true;
 
                             foreach (var enabledLeague in enabledCountry.Leagues)
@@ -174,6 +211,7 @@ public class InitializerService : IInitializerService
                                 }
                                 else
                                 {
+                                    _logger.LogInformation($"League enabled - [{enabledLeague}]");
                                     league.IsEnabled = true;
                                 }
                             }
@@ -190,8 +228,7 @@ public class InitializerService : IInitializerService
                 _logger.LogError(ex, "Failed to initialize enabled entities");
                 await _repositoryManager.RollbackTransactionAsync();
                 throw;
-            }
-  
+            }  
         }
     }
 }

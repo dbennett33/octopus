@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Octopus.EF.Data;
 
@@ -11,9 +12,11 @@ using Octopus.EF.Data;
 namespace Octopus.EF.Migrations
 {
     [DbContext(typeof(OctopusDbContext))]
-    partial class OctopusDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240610150732_InstallInfoUpdates")]
+    partial class InstallInfoUpdates
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -344,10 +347,7 @@ namespace Octopus.EF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("InstallEndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("InstallStartDate")
+                    b.Property<DateTime>("InstallDate")
                         .HasColumnType("datetime2")
                         .HasColumnName("InstallDate");
 
@@ -362,9 +362,10 @@ namespace Octopus.EF.Migrations
                         .HasColumnType("int")
                         .HasColumnName("SystemSettingsId");
 
-                    b.Property<int>("Version")
+                    b.Property<string>("Version")
+                        .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("int")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("Version");
 
                     b.HasKey("Id");
