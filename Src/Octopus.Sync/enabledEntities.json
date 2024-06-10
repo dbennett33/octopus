@@ -1,0 +1,10 @@
+{
+  "EnabledEntities": {
+    "EnabledCountries": [
+      {
+        "Name": "England",
+        "Leagues": [ "Premier League", "Championship" ]
+      }
+    ]
+  }
+}

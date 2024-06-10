@@ -28,6 +28,8 @@ namespace Octopus.EF.Data.Entities
         /// </summary>
         public string Flag { get; set; } = string.Empty;
 
+        public bool IsEnabled { get; set; }
+
         /// <summary>
         /// Gets or sets the leagues associated with the country.
         /// </summary>

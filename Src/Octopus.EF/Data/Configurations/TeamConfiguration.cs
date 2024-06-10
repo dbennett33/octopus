@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Octopus.EF.Data.Entities;
 
-namespace Octopus.EF.Data.Configuration
+namespace Octopus.EF.Data.Configurations
 {
     public class TeamConfiguration : IEntityTypeConfiguration<Team>
     {

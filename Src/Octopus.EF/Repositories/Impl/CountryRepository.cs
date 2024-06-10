@@ -35,40 +35,23 @@ public class CountryRepository : ICountryRepository, IDisposable
         return await _context.Countries.FirstOrDefaultAsync(c => c.Code == countryCode);
     }
 
-    public async Task AddCountryAsync(Country country)
+    public async Task AddOrUpdateCountryAsync(Country country)
     {
-        var exists = await ExistsAsync(country.Name);
-        if (exists)
+        var existingCountry = await _context.Countries.FirstOrDefaultAsync(c => c.Name == country.Name);
+        if (existingCountry != null)
         {
-            _logger.LogInformation($"Country [{country.Name}] already exists in database");
+            // need to set this here because the existing country will have autonumbered ID - api country will be 0
+            country.Id = existingCountry.Id;
+
+            _logger.LogInformation($"Country [{country.Name}] already exists in database - updating");
+            _context.Entry(existingCountry).CurrentValues.SetValues(country);
         }
         else
         {             
             _logger.LogInformation($"Adding country [{country.Name}] to database");
             await _context.Countries.AddAsync(country);
         }
-    }
-    
-    public async Task AddCountryRangeAsync(IEnumerable<Country> countries)
-    {
-        var countriesToAdd = new List<Country>();
-        foreach (var country in countries)
-        {
-            if (!await ExistsAsync(country.Name))
-            {
-                countriesToAdd.Add((country));
-            }
-        }
-
-        await _context.Countries.AddRangeAsync((countriesToAdd));
-    }
-
-
-    public void UpdateCountry(Country country)
-    {
-        _logger.LogInformation($"Updating country [{country.Name}] in database");
-        _context.Countries.Update(country);
-    }
+    }   
 
     public void DeleteCountry(Country country)
     {
@@ -89,5 +72,11 @@ public class CountryRepository : ICountryRepository, IDisposable
     {
         _logger.LogInformation($"Getting country by name from database - [{countryName}]");
         return _context.Countries.FirstOrDefaultAsync(c => c.Name == countryName);
+    }
+
+    public Task<Country?> GetCountryByNameIncludeLeaguesAsync(string countryName)
+    {
+        _logger.LogInformation($"Getting country by name from database - [{countryName}]");
+        return _context.Countries.Include(c => c.Leagues).FirstOrDefaultAsync(c => c.Name == countryName);
     }
 }

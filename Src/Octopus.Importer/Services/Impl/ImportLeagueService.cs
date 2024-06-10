@@ -24,24 +24,12 @@ namespace Octopus.Importer.Services.Impl
             bool success = false;
 
             try
-            {
-                var apiLeagues = await _apiLeagueService.GetLeaguesAsync();
-                var dbLeagues = await _repositoryManager.Leagues.GetLeaguesAsync();
-                var leaguesToAdd = new List<League>();
-
-                foreach (var league in apiLeagues)
+            {        
+                foreach (var league in await _apiLeagueService.GetLeaguesAsync())
                 {
-                    if (!dbLeagues.Any(l => l.Name == league.Name))
-                    {
-                        leaguesToAdd.Add(league);
-                    }
-                    else
-                    {
-                        _repositoryManager.Leagues.UpdateLeague(league);
-                    }
+                    await _repositoryManager.Leagues.AddOrUpdateLeagueAsync(league);
                 }
 
-                await _repositoryManager.Leagues.AddLeagueRangeAsync(leaguesToAdd);
                 success = true;
             }
             catch (Exception ex)

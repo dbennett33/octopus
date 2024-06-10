@@ -1,4 +1,4 @@
-namespace Octopus.EF.Data.Configuration
+namespace Octopus.EF.Data.Configurations
 {
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;

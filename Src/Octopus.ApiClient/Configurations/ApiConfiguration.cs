@@ -1,4 +1,4 @@
-namespace Octopus.ApiClient.Configuration
+namespace Octopus.ApiClient.Configurations
 {
     public class ApiConfiguration
     {

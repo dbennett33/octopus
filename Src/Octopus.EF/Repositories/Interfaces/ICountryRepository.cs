@@ -34,20 +34,13 @@ namespace Octopus.EF.Repositories.Interfaces
         /// <returns>A task that represents the asynchronous operation. The task result contains the country, or null if not found.</returns>
         Task<Country?> GetCountryByNameAsync(string countryName);
 
+        Task<Country?> GetCountryByNameIncludeLeaguesAsync(string countryName);
         /// <summary>
-        /// Adds a new country asynchronously.
+        /// Adds or updates a new country asynchronously.
         /// </summary>
-        /// <param name="country">The country to add.</param>
+        /// <param name="country">The country to add or update.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        Task AddCountryAsync(Country country);
-
-        Task AddCountryRangeAsync(IEnumerable<Country> countries);
-        
-        /// <summary>
-        /// Updates an existing country.
-        /// </summary>
-        /// <param name="country">The country to update.</param>
-        void UpdateCountry(Country country);
+        Task AddOrUpdateCountryAsync(Country country);
 
         /// <summary>
         /// Deletes a country.

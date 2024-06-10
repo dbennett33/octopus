@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Newtonsoft.Json;
+using NLog.Extensions.Logging;
 using Octopus.ApiClient.Mappers.Interfaces;
 using Octopus.ApiClient.Models;
 using Octopus.ApiClient.Services.Impl;
@@ -18,13 +21,30 @@ namespace Octopus.ApiClient.Tests
         private Mock<IApiClientService> _mockApiClient;
         private Mock<ILeagueMapper> _mockLeagueMapper;
         private ApiLeagueService _service;
+        private ILogger<ApiLeagueService>? _logger;
+        private IServiceProvider? _serviceProvider;
+        private StringWriter? _consoleOutput;
 
         [TestInitialize]
         public void Setup()
         {
             _mockApiClient = new Mock<IApiClientService>();
             _mockLeagueMapper = new Mock<ILeagueMapper>();
-            _service = new ApiLeagueService(_mockApiClient.Object, _mockLeagueMapper.Object);
+
+            // Configure NLog to log to the console
+            _serviceProvider = new ServiceCollection()
+                .AddLogging(loggingBuilder =>
+                {
+                    loggingBuilder.ClearProviders();
+                    loggingBuilder.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+                    loggingBuilder.AddNLog("nlog.config");
+                })
+            .BuildServiceProvider();
+
+            var factory = _serviceProvider.GetService<ILoggerFactory>();
+            _logger = factory!.CreateLogger<ApiLeagueService>();
+
+            _service = new ApiLeagueService(_mockApiClient.Object, _mockLeagueMapper.Object, _logger);
         }
 
         [TestMethod]

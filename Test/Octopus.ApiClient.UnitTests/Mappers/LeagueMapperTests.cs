@@ -32,7 +32,7 @@ namespace Octopus.ApiClient.Tests
                         Year = 2020, Start = "2020-01-01", End = "2020-12-31", Current = true,
                         Coverage = new Models.Coverage
                         {
-                            Fixtures = new Fixtures { Events = true, Lineups = true, StatisticsFixtures = true, StatisticsPlayers = true },
+                            Fixtures = new CoverageFixtures { Events = true, Lineups = true, StatisticsFixtures = true, StatisticsPlayers = true },
                             Standings = true, Players = true, TopScorers = true, TopAssists = true, TopCards = true,
                             Injuries = true, Predictions = true, Odds = true
                         }
@@ -112,7 +112,7 @@ namespace Octopus.ApiClient.Tests
                         Year = 2020, Start = null, End = null, Current = false,
                         Coverage = new Models.Coverage
                         {
-                            Fixtures = new Fixtures { Events = false, Lineups = false, StatisticsFixtures = false, StatisticsPlayers = false },
+                            Fixtures = new CoverageFixtures { Events = false, Lineups = false, StatisticsFixtures = false, StatisticsPlayers = false },
                             Standings = false, Players = false, TopScorers = false, TopAssists = false, TopCards = false,
                             Injuries = false, Predictions = false, Odds = false
                         }
