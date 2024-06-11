@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Octopus.EF.Data;
 
@@ -11,9 +12,11 @@ using Octopus.EF.Data;
 namespace Octopus.EF.Migrations
 {
     [DbContext(typeof(OctopusDbContext))]
-    partial class OctopusDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240611190231_TempRemoveVenues")]
+    partial class TempRemoveVenues
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -212,6 +215,9 @@ namespace Octopus.EF.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<int>("VenueId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AwayTeamId");
@@ -221,6 +227,8 @@ namespace Octopus.EF.Migrations
                     b.HasIndex("LeagueId");
 
                     b.HasIndex("SeasonId");
+
+                    b.HasIndex("VenueId");
 
                     b.ToTable("Fixtures");
                 });
@@ -731,7 +739,7 @@ namespace Octopus.EF.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Venue");
+                    b.ToTable("Venues");
                 });
 
             modelBuilder.Entity("Octopus.EF.Data.Entities.Coverage", b =>
@@ -771,6 +779,12 @@ namespace Octopus.EF.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Octopus.EF.Data.Entities.Venue", "Venue")
+                        .WithMany()
+                        .HasForeignKey("VenueId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("AwayTeam");
 
                     b.Navigation("HomeTeam");
@@ -778,6 +792,8 @@ namespace Octopus.EF.Migrations
                     b.Navigation("League");
 
                     b.Navigation("Season");
+
+                    b.Navigation("Venue");
                 });
 
             modelBuilder.Entity("Octopus.EF.Data.Entities.FixtureLineup", b =>

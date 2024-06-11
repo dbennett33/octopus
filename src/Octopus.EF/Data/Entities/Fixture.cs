@@ -30,15 +30,15 @@ namespace Octopus.EF.Data.Entities
         /// </summary>
         public string Timestamp { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Gets or sets the unique identifier of the venue for the fixture.
-        /// </summary>
-        public int VenueId { get; set; }
+        ///// <summary>
+        ///// Gets or sets the unique identifier of the venue for the fixture.
+        ///// </summary>
+        //public int VenueId { get; set; }
 
-        /// <summary>
-        /// Gets or sets the venue for the fixture.
-        /// </summary>
-        public Venue Venue { get; set; } = new Venue();
+        ///// <summary>
+        ///// Gets or sets the venue for the fixture.
+        ///// </summary>
+        //public Venue Venue { get; set; } = new Venue();
 
         /// <summary>
         /// Gets or sets the long status of the fixture.

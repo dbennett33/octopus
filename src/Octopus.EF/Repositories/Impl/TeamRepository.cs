@@ -26,8 +26,7 @@ namespace Octopus.EF.Repositories.Impl
         public async Task<Team?> GetTeamByIdAsync(int teamId)
         {
             _logger.LogTrace($"Getting team by ID from database - [{teamId}]");
-            return await _context.Teams.Include(t => t.Venue)
-                                       .Include(t => t.TeamStats)
+            return await _context.Teams.Include(t => t.TeamStats)
                                        .FirstOrDefaultAsync(t => t.Id == teamId);
         }
 

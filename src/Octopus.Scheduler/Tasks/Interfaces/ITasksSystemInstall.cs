@@ -1,9 +1,10 @@
 ﻿using Octopus.EF.Data.Entities;
 
-namespace Octopus.Sync.Services.Interfaces
+namespace Octopus.Scheduler.Tasks.Interfaces
 {
-    public interface IInstallerService
+    public interface ITasksSystemInstall
     {
+        Task Install();
         Task<InstallInfo> InstallStageOne(InstallInfo installInfo);
         Task<InstallInfo> InstallStageTwo(InstallInfo installInfo);
     }

@@ -5,6 +5,7 @@ using Octopus.EF.Repositories.Interfaces;
 using Octopus.Scheduler.Services.Interfaces;
 using Octopus.Sync.Configurations;
 using Octopus.Sync.Services.Interfaces;
+using System.Text;
 using System.Text.Json;
 
 namespace Octopus.Sync.Services.Impl;
@@ -13,7 +14,6 @@ public class InitializerService : IInitializerService
 {
     private readonly IRepositoryManager _repositoryManager;
     private readonly IApiClientService _apiClientService;
-    private readonly IInstallerService _installerService;
     private readonly EnabledEntitiesConfig _enabledEntitiesConfig;
     private readonly IScheduleManagerService _scheduleManagerService;
     private readonly ILogger<InitializerService> _logger;
@@ -24,14 +24,12 @@ public class InitializerService : IInitializerService
 
     public InitializerService(IRepositoryManager repositoryManager,
                               IApiClientService apiClientService,
-                              IInstallerService installerService,
                               IOptions<EnabledEntitiesConfig> enabledEntitiesConfig,
                               IScheduleManagerService scheduleManagerService,
                               ILogger<InitializerService> logger)
     {
         _repositoryManager = repositoryManager;
         _apiClientService = apiClientService;
-        _installerService = installerService;
         _enabledEntitiesConfig = enabledEntitiesConfig.Value;
         _scheduleManagerService = scheduleManagerService;
         _logger = logger;
@@ -42,11 +40,12 @@ public class InitializerService : IInitializerService
         _logger.LogInformation("Initializing system");
         await InitDatabase();
         await InitSystemSettings();
-        await InitInstallData();
+        await InitInstallData();        
 
         if (_needsInstall)
-        {
-            await Install();
+        {            
+            await _scheduleManagerService.InstallScheduler.InstallSystem();
+            _logger.LogInformation("System install scheduled.");
         }
 
         await InitRecurringTasks();
@@ -59,26 +58,6 @@ public class InitializerService : IInitializerService
         await _scheduleManagerService.LeagueScheduler.ScheduleRecurringLeagueJobs();
     }
 
-    private async Task Install()
-    {
-        _installInfo = await _installerService.InstallStageOne(_installInfo!);
-
-        await InitEnabledEntities();
-
-        _installInfo = await _installerService.InstallStageTwo(_installInfo!);
-
-        if (_installInfo.IsComplete)
-        {
-            _repositoryManager.InstallInfo.UpdateInstallInfoAsync(_installInfo);
-            await _repositoryManager.CompleteAsync();
-            _logger.LogInformation("Install complete");
-        }
-        else
-        {
-            _logger.LogError("Install failed");
-        }
-    }
-
     private async Task InitSystemSettings()
     {
         try
@@ -88,13 +67,14 @@ public class InitializerService : IInitializerService
             if (systemSettings == null)
             {
                 systemSettings = new SystemSettings();
-                systemSettings.CurrentVersion = "0";
+                systemSettings.CurrentVersion = "0.0.1";
 
+                _systemSettings = systemSettings;
+                _logger.LogInformation($"System does not exist - creating new system - v{_systemSettings.CurrentVersion}");
                 await _repositoryManager.SystemSettings.AddSystemSettingsAsync(systemSettings);
                 await _repositoryManager.CompleteAsync();
             }
-
-            if (systemSettings != null)
+            else
             {
                 _systemSettings = systemSettings;
                 _logger.LogInformation($"System exists - v{_systemSettings.CurrentVersion}");               
@@ -206,7 +186,10 @@ public class InitializerService : IInitializerService
                     await _repositoryManager.Countries.AddOrUpdateCountryAsync(country);
                     await _repositoryManager.CompleteAsync();
                 }
-                            
+
+
+                var sb = new StringBuilder();     
+                sb.AppendLine("Enabled Countries/Leagues:").AppendLine();           
                 foreach (var enabledCountry in _enabledEntitiesConfig.EnabledCountries)
                 {
                     if (enabledCountry.Name == null)
@@ -224,7 +207,7 @@ public class InitializerService : IInitializerService
                         }
                         else
                         {
-                            _logger.LogInformation($"Country enabled - [{enabledCountry.Name}]");
+                            sb.AppendLine($"|-{country.Name}");
                             country.IsEnabled = true;
 
                             foreach (var enabledLeague in enabledCountry.Leagues)
@@ -238,16 +221,18 @@ public class InitializerService : IInitializerService
                                 }
                                 else
                                 {
-                                    _logger.LogInformation($"League enabled - [{enabledLeague}]");
+                                    sb.AppendLine($"¦---{league.Name}");  
                                     league.IsEnabled = true;
                                 }
                             }
+                            sb.AppendLine("|");
 
                             await _repositoryManager.Countries.AddOrUpdateCountryAsync(country);
                         }
                     }
                 }
 
+                _logger.LogInformation(sb.ToString());
                 _installInfo!.EnabledEntitiesApplied = true;
 
                 await _repositoryManager.CommitTransactionAsync();

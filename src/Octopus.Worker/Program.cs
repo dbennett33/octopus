@@ -32,7 +32,6 @@ public class Program
 
         builder.Services.Configure<EnabledEntitiesConfig>(configuration.GetSection("EnabledEntities"));
 
-
         ConfigureLogging(builder);
         ConfigureDatabase(builder, configuration);
 

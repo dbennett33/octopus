@@ -40,15 +40,15 @@ namespace Octopus.EF.Data.Entities
         /// </summary>
         public string Logo { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Gets or sets the ID of the venue where the team plays its home matches.
-        /// </summary>
-        public int? VenueId { get; set; }
+        ///// <summary>
+        ///// Gets or sets the ID of the venue where the team plays its home matches.
+        ///// </summary>
+        //public int? VenueId { get; set; }
 
-        /// <summary>
-        /// Gets or sets the venue where the team plays its home matches.
-        /// </summary>
-        public Venue Venue { get; set; } = new Venue();
+        ///// <summary>
+        ///// Gets or sets the venue where the team plays its home matches.
+        ///// </summary>
+        //public Venue Venue { get; set; } = new Venue();
 
         /// <summary>
         /// Gets or sets the list of team statistics.
