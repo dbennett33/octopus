@@ -1,5 +1,4 @@
 using Microsoft.Extensions.Options;
-using Octopus.ApiClient.Services.Impl;
 using Octopus.ApiClient.Services.Interfaces;
 using Octopus.EF.Data.Entities;
 using Octopus.EF.Repositories.Interfaces;
@@ -40,18 +39,18 @@ public class InitializerService : IInitializerService
 
     public async Task InitializeAsync()
     {
+        _logger.LogInformation("Initializing system");
         await InitDatabase();
         await InitSystemSettings();
         await InitInstallData();
 
-        // Need to install Countries and Leagues before we can initialize enabled entities
         if (_needsInstall)
         {
             await Install();
         }
 
         await InitRecurringTasks();
-
+        _logger.LogInformation("System initialized");
     }
 
     private async Task InitRecurringTasks()

@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
-using Hangfire;
+﻿using Hangfire;
 using Octopus.ApiClient;
 using Octopus.ApiClient.Configurations;
 using Octopus.ApiClient.Mappers.Impl;

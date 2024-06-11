@@ -1,15 +1,12 @@
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Octopus.ApiClient.Mappers.Interfaces;
+using Octopus.ApiClient.Models;
+using Octopus.ApiClient.Services.Interfaces;
+using Octopus.EF.Data.Entities;
+
 namespace Octopus.ApiClient.Services.Impl
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using Microsoft.Extensions.Logging;
-    using Newtonsoft.Json;
-    using Octopus.ApiClient.Mappers.Interfaces;
-    using Octopus.ApiClient.Models;
-    using Octopus.ApiClient.Services.Interfaces;
-    using Octopus.EF.Data.Entities;
-
     public class ApiCountryService : IApiCountryService
     {
         private readonly IApiClientService _apiClient;
@@ -18,7 +15,9 @@ namespace Octopus.ApiClient.Services.Impl
         private readonly ILogger<ApiCountryService> _logger;
         private readonly string _countriesEndpoint = ApiGlobal.Endpoints.COUNTRIES;
 
-        public ApiCountryService(IApiClientService apiClient, ICountryMapper countryMapper, ILogger<ApiCountryService> logger)
+        public ApiCountryService(IApiClientService apiClient,
+                                 ICountryMapper countryMapper,
+                                 ILogger<ApiCountryService> logger)
         {
             _apiClient = apiClient;
             _countryMapper = countryMapper;
@@ -33,7 +32,7 @@ namespace Octopus.ApiClient.Services.Impl
 
                 if (string.IsNullOrEmpty(response))
                 {
-                    _logger.LogInformation("API response is null or empty.");
+                    _logger.LogError("API response is null or empty.");
                     throw new Exception("API response is null or empty");
                 }
 
@@ -49,7 +48,7 @@ namespace Octopus.ApiClient.Services.Impl
             }
             catch (Exception ex)
             {
-                _logger.LogInformation($"Error fetching countries: {ex.Message}");
+                _logger.LogError($"Error fetching countries: {ex.Message}");
                 throw;
             }
         }

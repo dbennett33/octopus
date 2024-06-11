@@ -1,14 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Octopus.ApiClient.Services.Interfaces;
-using Octopus.EF.Data.Entities;
 using Octopus.EF.Repositories.Interfaces;
 using Octopus.Importer.Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Metrics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Octopus.Importer.Services.Impl
 {
@@ -18,7 +11,9 @@ namespace Octopus.Importer.Services.Impl
         private readonly IApiCountryService _apiCountryService;
         private readonly ILogger<ImportCountryService> _logger;
 
-        public ImportCountryService(IRepositoryManager repositoryManager, IApiCountryService apiCountryService, ILogger<ImportCountryService> logger)
+        public ImportCountryService(IRepositoryManager repositoryManager,
+                                    IApiCountryService apiCountryService,
+                                    ILogger<ImportCountryService> logger)
         {
             _repositoryManager = repositoryManager ?? throw new ArgumentNullException(nameof(repositoryManager));
             _apiCountryService = apiCountryService ?? throw new ArgumentNullException(nameof(apiCountryService));

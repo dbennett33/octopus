@@ -1,8 +1,5 @@
 namespace Octopus.EF.Data.Entities
 {
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
     /// <summary>
     /// Represents a country.
     /// </summary>

@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Octopus.EF.Data.Entities;
+﻿using Octopus.EF.Data.Entities;
 using Octopus.EF.Repositories.Interfaces;
-using Octopus.Importer.Services.Impl;
 using Octopus.Importer.Services.Interfaces;
 using Octopus.Sync.Services.Interfaces;
 
@@ -67,6 +61,10 @@ namespace Octopus.Sync.Services.Impl
             installInfo.TeamsInstalled = await InstallTeams(installInfo);
 
              
+
+
+
+
 
 
             installInfo.InstallEndDate = DateTime.Now;

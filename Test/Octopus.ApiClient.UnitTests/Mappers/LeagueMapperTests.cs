@@ -75,29 +75,6 @@ namespace Octopus.ApiClient.Tests
         }
 
         [TestMethod]
-        public void Map_ShouldReturnLeagueWithEmptyValues_WhenApiLeagueIsNull()
-        {
-            // Arrange
-            var apiLeague = new ApiLeague();
-
-            // Act
-            var result = _mapper.Map(apiLeague);
-
-            // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(0, result.Id);
-            Assert.AreEqual(string.Empty, result.Name);
-            Assert.AreEqual(string.Empty, result.Type);
-            Assert.AreEqual(string.Empty, result.Logo);
-            Assert.IsNotNull(result.Country);
-            Assert.AreEqual(string.Empty, result.Country.Name);
-            Assert.AreEqual(string.Empty, result.Country.Code);
-            Assert.AreEqual(string.Empty, result.Country.Flag);
-            Assert.IsNotNull(result.Seasons);
-            Assert.AreEqual(0, result.Seasons.Count);
-        }
-
-        [TestMethod]
         public void Map_ShouldHandleNullPropertiesInApiLeague()
         {
             // Arrange

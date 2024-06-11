@@ -1,7 +1,5 @@
 namespace Octopus.EF.Data.Entities
 {
-    using System.Collections.Generic;
-
     /// <summary>
     /// Represents the statistics of a team.
     /// </summary>

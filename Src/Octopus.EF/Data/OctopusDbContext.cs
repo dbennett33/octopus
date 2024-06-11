@@ -1,11 +1,9 @@
+using Microsoft.EntityFrameworkCore;
 using Octopus.EF.Data.Configurations;
+using Octopus.EF.Data.Entities;
 
 namespace Octopus.EF.Data
 {
-    using Microsoft.EntityFrameworkCore;
-    using Octopus.EF.Data.Configurations;
-    using Octopus.EF.Data.Entities;
-
     /// <summary>
     /// Represents the database context for the Octopus application.
     /// </summary>

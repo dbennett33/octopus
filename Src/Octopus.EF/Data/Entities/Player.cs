@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace Octopus.EF.Data.Entities
 {
     /// <summary>
