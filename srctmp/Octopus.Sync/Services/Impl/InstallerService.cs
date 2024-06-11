@@ -58,14 +58,10 @@ namespace Octopus.Sync.Services.Impl
                 throw new ArgumentNullException(nameof(installInfo));
             }
 
-            installInfo.TeamsInstalled = await InstallTeams(installInfo);
-
-             
-
-
-
-
-
+            if (!installInfo.TeamsInstalled)
+            {
+                installInfo.TeamsInstalled = await InstallTeams(installInfo);
+            }
 
             installInfo.InstallEndDate = DateTime.Now;
             installInfo.IsComplete = true;
