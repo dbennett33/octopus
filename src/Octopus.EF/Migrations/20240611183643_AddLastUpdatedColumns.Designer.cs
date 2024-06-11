@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Octopus.EF.Data;
 
@@ -11,9 +12,11 @@ using Octopus.EF.Data;
 namespace Octopus.EF.Migrations
 {
     [DbContext(typeof(OctopusDbContext))]
-    partial class OctopusDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240611183643_AddLastUpdatedColumns")]
+    partial class AddLastUpdatedColumns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

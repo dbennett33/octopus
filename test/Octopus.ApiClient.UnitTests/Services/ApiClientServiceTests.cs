@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Moq.Protected;
+using Octopus.ApiClient.Exceptions;
 using Octopus.ApiClient.Services.Impl;
 using Octopus.ApiClient.Services.Interfaces;
 
@@ -46,28 +47,19 @@ namespace Octopus.ApiClient.Tests
             Assert.AreEqual(50, result);
         }
 
+        [ExpectedException(typeof(RateLimitExceededException))]
         [TestMethod]
-        public async Task GetAsync_ShouldLogWarning_WhenRateLimitExceeded()
+        public async Task GetAsync_ShouldThrowException_WhenRateLimitExceeded()
         {
             // Arrange
             _apiState!.CallsRemaining = 0;
+            _apiState!.ResetTime = DateTime.Now.AddMinutes(5);
             var endpoint = "http://example.com";
 
             // Act
             var result = await _service!.GetAsync(endpoint);
 
-            // Assert
-            Assert.AreEqual(string.Empty, result);
-            _loggerMock!.Verify(
-                x => x.Log(
-                    LogLevel.Warning,
-                    It.IsAny<EventId>(),
-                    It.Is<It.IsAnyType>((v, t) => v != null && v.ToString()!.Contains("Rate limit exceeded. No more requests can be made.")),
-                    It.IsAny<Exception>(),
-                    (Func<It.IsAnyType, Exception?, string>)It.IsAny<object>()
-                ),
-                Times.Once
-            );
+            // Assert 
         }
 
 

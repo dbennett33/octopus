@@ -54,5 +54,7 @@ namespace Octopus.EF.Data.Entities
         /// Gets or sets the list of team statistics.
         /// </summary>
         public ICollection<TeamStats> TeamStats { get; set; } = new List<TeamStats>();
+
+        public DateTime LastUpdated { get; set; }
     }
 }

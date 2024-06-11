@@ -4,6 +4,6 @@ namespace Octopus.ApiClient.Services.Interfaces
     {
         Task<string> GetAsync(string endpoint);
         int GetRemainingCalls();
-        int GetResetTime();
+        DateTime GetResetTime();
     }
 }

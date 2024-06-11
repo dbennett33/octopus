@@ -154,5 +154,6 @@ namespace Octopus.EF.Data.Entities
         /// Gets or sets the statistics for a fixture.
         /// </summary>
         public FixtureStats Stats { get; set; } = new FixtureStats();
+        public DateTime LastUpdated { get; set; }
     }
 }
