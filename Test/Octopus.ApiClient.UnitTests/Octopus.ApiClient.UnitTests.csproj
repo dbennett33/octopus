@@ -22,7 +22,7 @@
 
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\Octopus.ApiClient\Octopus.ApiClient.csproj" />
+      <ProjectReference Include="..\..\Src\Octopus.ApiClient\Octopus.ApiClient.csproj" />
     </ItemGroup>
 
 
