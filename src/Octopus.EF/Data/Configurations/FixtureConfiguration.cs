@@ -26,12 +26,7 @@ namespace Octopus.EF.Data.Configurations
             builder.Property(f => f.StatusShort).HasMaxLength(10);
             builder.Property(f => f.TimeElapsed).IsRequired();
             builder.Property(f => f.Round).HasMaxLength(50);
-
-            builder.HasOne(f => f.Venue)
-                .WithMany()
-                .HasForeignKey(f => f.VenueId)
-                .OnDelete(DeleteBehavior.Restrict);
-
+                 
             builder.HasOne(f => f.League)
                 .WithMany()
                 .HasForeignKey(f => f.LeagueId)

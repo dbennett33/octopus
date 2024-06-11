@@ -22,7 +22,7 @@ namespace Octopus.Importer.Services.Impl
 
         public async Task<bool> ImportTeamsByCountryAsync(string countryName)
         {
-            bool success = false;
+            bool success = true;
 
             try
             {
@@ -30,12 +30,11 @@ namespace Octopus.Importer.Services.Impl
                 {
                     await _repositoryManager.Teams.AddOrUpdateTeamAsync(team);
                 }
-
-                success = true;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Something went wrong during the Team import - ");
+                success = false;
             }
 
 
@@ -44,7 +43,7 @@ namespace Octopus.Importer.Services.Impl
 
         public async Task<bool> ImportTeamsByLeagueAsync(int leagueId, string season)
         {
-            bool success = false;
+            bool success = true;
 
             try
             {
@@ -52,12 +51,11 @@ namespace Octopus.Importer.Services.Impl
                 {
                     await _repositoryManager.Teams.AddOrUpdateTeamAsync(team);
                 }
-
-                success = true;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Something went wrong during the Team import - ");
+                success = false;
             }
 
             return success;

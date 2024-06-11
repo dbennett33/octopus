@@ -14,7 +14,11 @@ namespace Octopus.Scheduler.Tasks.Impl
 
         public async Task GetLeagues()
         {
-            await _importLeagueService.ImportLeagues();
+            bool success = await _importLeagueService.ImportLeagues();
+            if (!success)
+            {
+                throw new Exception("Something went wrong during the League import");
+            }
         }
     }
 }

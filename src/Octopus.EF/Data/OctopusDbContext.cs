@@ -26,10 +26,10 @@ namespace Octopus.EF.Data
         /// </summary>
         public DbSet<Team> Teams { get; set; }
 
-        /// <summary>
-        /// Gets or sets the DbSet for the Venue entity.
-        /// </summary>
-        public DbSet<Venue> Venues { get; set; }
+        ///// <summary>
+        ///// Gets or sets the DbSet for the Venue entity.
+        ///// </summary>
+        //public DbSet<Venue> Venues { get; set; }
 
         /// <summary>
         /// Gets or sets the DbSet for the Fixture entity.

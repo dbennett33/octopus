@@ -1,0 +1,31 @@
+{
+  "EnabledEntities": {
+    "EnabledCountries": [
+      {
+        "Name": "England",
+        "Leagues": [ "Premier League", "Championship", "League One", "League Two" ]
+      },
+      {
+        "Name": "Spain",
+        "Leagues": [ "La Liga" ]
+      },
+      {
+        "Name": "Germany",
+        "Leagues": [ "Bundesliga" ]
+      },
+      {
+        "Name": "Italy",
+        "Leagues": [ "Serie A", "Serie B" ]
+      },
+      {
+        "Name": "France",
+        "Leagues": [ "Ligue 1" ]
+      },
+      {
+        "Name": "World",
+        "Leagues": [ "Euro Championship" ]
+      }
+    ]
+  }
+}
+

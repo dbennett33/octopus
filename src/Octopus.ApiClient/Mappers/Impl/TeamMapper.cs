@@ -22,17 +22,6 @@ namespace Octopus.ApiClient.Mappers.Impl
                 Founded = apiTeam.Team.Founded.ToString() ?? string.Empty,
                 IsNationalTeam = apiTeam.Team.National,
                 Logo = apiTeam.Team.Logo ?? string.Empty,
-                VenueId = apiTeam.Venue.Id,
-                Venue = new Venue
-                {
-                    Id = apiTeam.Venue.Id,
-                    Name = apiTeam.Venue.Name ?? string.Empty,
-                    Address = apiTeam.Venue.Address ?? string.Empty,
-                    City = apiTeam.Venue.City ?? string.Empty,
-                    Capacity = Convert.ToInt32(apiTeam.Venue.Capacity),
-                    Surface = apiTeam.Venue.Surface ?? string.Empty,
-                    Image = apiTeam.Venue.Image ?? string.Empty
-                },
                 TeamStats = new List<TeamStats>() // Assuming you will populate this separately
             };
         }

@@ -1,5 +1,6 @@
 using System.Net.Http.Headers;
 using Microsoft.Extensions.Logging;
+using Octopus.ApiClient.Exceptions;
 using Octopus.ApiClient.Services.Interfaces;
 
 namespace Octopus.ApiClient.Services.Impl
@@ -21,16 +22,22 @@ namespace Octopus.ApiClient.Services.Impl
         }
 
         public int GetRemainingCalls() => _apiState.CallsRemaining;
-        public int GetResetTime() => _apiState.ResetTime;
+        public DateTime GetResetTime() => _apiState.ResetTime;
 
         public async Task<string> GetAsync(string endpoint)
+        {
+            return await CallApiAsync(endpoint);
+        }
+
+        private async Task<string> CallApiAsync(string endpoint)
         {
             string content = string.Empty;
             try
             {
-                if (_apiState.CallsRemaining <= 0)
+                if (_apiState.CallsRemaining <= 0 && (_apiState.ResetTime + TimeSpan.FromMinutes(2)) > DateTime.Now)
                 {
-                    _logger.LogWarning("Rate limit exceeded. No more requests can be made.");
+                    _logger.LogError($"Rate limit exceeded. No more requests can be made until {_apiState.ResetTime.ToString()}.");
+                    throw new RateLimitExceededException(_apiState.ResetTime);
                 }
                 else
                 {
@@ -48,12 +55,17 @@ namespace Octopus.ApiClient.Services.Impl
             {
                 _logger.LogError($"Request error: {e.Message}");
             }
+            catch(RateLimitExceededException e)
+            {               
+                throw;
+            }
             catch (Exception e)
             {
                 _logger.LogError($"Unexpected error: {e.Message}");
             }
+       
 
-            return content;     
+            return content;
         }
 
         public void UpdateRateLimitInfo(HttpResponseHeaders? headers)
@@ -73,7 +85,7 @@ namespace Octopus.ApiClient.Services.Impl
                 {
                     if (int.TryParse(resetTime.FirstOrDefault(), out var reset))
                     {
-                        _apiState.ResetTime = reset;
+                        _apiState.ResetTime = DateTime.UtcNow.AddSeconds(reset);
                     }
                     else
                     {

@@ -14,7 +14,11 @@ namespace Octopus.Scheduler.Tasks.Impl
 
         public async Task GetCountries()
         {
-            await _importCountryService.ImportCountries();
+            bool success = await _importCountryService.ImportCountries();
+            if (!success)
+            {
+                throw new Exception("Something went wrong during the Country import");
+            }
         }
     }
 }

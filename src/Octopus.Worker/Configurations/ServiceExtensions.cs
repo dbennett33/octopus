@@ -78,9 +78,7 @@ namespace Octopus.Sync.Configurations
 
         public static IServiceCollection AddSyncServices(this IServiceCollection services)
         {
-            services.AddScoped<ISyncService, SyncService>();
             services.AddScoped<IInitializerService, InitializerService>();
-            services.AddScoped<IInstallerService, InstallerService>();
             services.AddScoped<IImportCountryService, ImportCountryService>();
             services.AddScoped<IImportLeagueService, ImportLeagueService>();
 
@@ -90,12 +88,15 @@ namespace Octopus.Sync.Configurations
         public static IServiceCollection AddSchedulerServices(this IServiceCollection services)
         {
             services.AddScoped<IScheduleManagerService, ScheduleManagerService>();
-            
+
+            services.AddScoped<IScheduleSystemInstall, ScheduleSystemInstall>();
             services.AddScoped<IScheduleCountryService, ScheduleCountryService>();
             services.AddScoped<IScheduleLeagueService, ScheduleLeagueService>();
 
+            services.AddTransient<ITasksSystemInstall, TasksSystemInstall>();
             services.AddTransient<ITasksCountry, TasksCountry>();
             services.AddTransient<ITasksLeague, TasksLeague>();
+
 
             return services;
         }

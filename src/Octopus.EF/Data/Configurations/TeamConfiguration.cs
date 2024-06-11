@@ -32,11 +32,6 @@ namespace Octopus.EF.Data.Configurations
             builder.Property(t => t.Logo)
                 .HasMaxLength(200);
 
-            builder.HasOne(t => t.Venue)
-                .WithMany()
-                .HasForeignKey(t => t.VenueId)
-                .OnDelete(DeleteBehavior.SetNull);
-
             builder.HasMany(t => t.TeamStats)
                 .WithOne(ts => ts.Team)
                 .HasForeignKey(ts => ts.TeamId)

@@ -22,7 +22,7 @@ namespace Octopus.Importer.Services.Impl
 
         public async Task<bool> ImportLeagues()
         {
-            bool success = false;
+            bool success = true;
 
             try
             {        
@@ -30,12 +30,11 @@ namespace Octopus.Importer.Services.Impl
                 {
                     await _repositoryManager.Leagues.AddOrUpdateLeagueAsync(league);
                 }
-
-                success = true;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Something went wrong during the League import - ");
+                success = false;
             }
 
             return success;

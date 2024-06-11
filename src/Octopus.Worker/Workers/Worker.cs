@@ -18,20 +18,13 @@ namespace Octopus.Sync.Workers
 
             using (var scope = _serviceProvider.CreateScope())
             {
-                var syncService = scope.ServiceProvider.GetRequiredService<ISyncService>();
-                await syncService.Init();
+                var initService = scope.ServiceProvider.GetRequiredService<IInitializerService>();
+                await initService.InitializeAsync();
             }
 
             while (!stoppingToken.IsCancellationRequested)
             {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-
-                using (var scope = _serviceProvider.CreateScope())
-                {
-                    var syncService = scope.ServiceProvider.GetRequiredService<ISyncService>();
-                    await syncService.Run();
-                }
-
+                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);    
                 await Task.Delay(1000, stoppingToken);
             }
         }

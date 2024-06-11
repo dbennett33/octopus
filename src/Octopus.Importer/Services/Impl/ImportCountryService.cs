@@ -22,20 +22,19 @@ namespace Octopus.Importer.Services.Impl
 
         public async Task<bool> ImportCountries()
         {
-            bool success = false;
+            bool success = true;
 
             try
             {    
                 foreach (var country in await _apiCountryService.GetCountriesAsync())
                 {
                     await _repositoryManager.Countries.AddOrUpdateCountryAsync(country);
-                }
-
-                success = true;
+                }        
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Something went wrong during the Country import - ");
+                success = false;
             }
 
             return success;
