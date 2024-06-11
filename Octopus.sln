@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34928.147
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{52031C73-0194-4CE4-AE9A-CDEB25B8C622}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solution_items", "solution_items", "{52031C73-0194-4CE4-AE9A-CDEB25B8C622}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
@@ -11,23 +11,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Octopus.ApiClient", "Src\Octopus.ApiClient\Octopus.ApiClient.csproj", "{21B74B2B-B4EF-427D-A99D-433E5252E5DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Octopus.ApiClient", "src\Octopus.ApiClient\Octopus.ApiClient.csproj", "{21B74B2B-B4EF-427D-A99D-433E5252E5DE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Octopus.EF", "Src\Octopus.EF\Octopus.EF.csproj", "{DE6754BD-95E8-4C3D-90A4-03004B26964C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Octopus.EF", "src\Octopus.EF\Octopus.EF.csproj", "{DE6754BD-95E8-4C3D-90A4-03004B26964C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Octopus.ApiClient.UnitTests", "Test\Octopus.ApiClient.UnitTests\Octopus.ApiClient.UnitTests.csproj", "{2692F486-86DD-4FBF-B5C3-AF40AF17E0E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Octopus.ApiClient.UnitTests", "test\Octopus.ApiClient.UnitTests\Octopus.ApiClient.UnitTests.csproj", "{2692F486-86DD-4FBF-B5C3-AF40AF17E0E8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Octopus.EF.UnitTests", "Test\Octopus.EF.UnitTests\Octopus.EF.UnitTests.csproj", "{8C8A792D-1AA5-4748-A33F-9B9CF23FBC2E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Octopus.EF.UnitTests", "test\Octopus.EF.UnitTests\Octopus.EF.UnitTests.csproj", "{8C8A792D-1AA5-4748-A33F-9B9CF23FBC2E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{1DDA60A7-46CA-425C-9D18-DED015EA027D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1DDA60A7-46CA-425C-9D18-DED015EA027D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{D25ABD72-DA89-4508-89F4-B234331490A1}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{D25ABD72-DA89-4508-89F4-B234331490A1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Octopus.Sync", "Src\Octopus.Sync\Octopus.Sync.csproj", "{DFC93F9C-4E05-470B-ADCD-448EAB4C9D91}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Octopus.Sync", "src\Octopus.Sync\Octopus.Sync.csproj", "{DFC93F9C-4E05-470B-ADCD-448EAB4C9D91}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Octopus.Importer", "Src\Octopus.Importer\Octopus.Importer.csproj", "{78429FF2-2C62-430F-A90C-6ADFC5770F8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Octopus.Importer", "src\Octopus.Importer\Octopus.Importer.csproj", "{78429FF2-2C62-430F-A90C-6ADFC5770F8D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Octopus.Scheduler", "Src\Octopus.Scheduler\Octopus.Scheduler.csproj", "{5A36C765-4C7B-4C82-A542-13CE11462C54}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Octopus.Scheduler", "src\Octopus.Scheduler\Octopus.Scheduler.csproj", "{5A36C765-4C7B-4C82-A542-13CE11462C54}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
